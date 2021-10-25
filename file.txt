@@ -1,0 +1,6 @@
+# This puzzle is solvable
+3
+
+3 5 8   #aap
+6 1 4   #ee
+7 2 0   #i
