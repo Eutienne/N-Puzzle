@@ -12,11 +12,46 @@
 
 #include "npuzzle.hpp"
 
+note const &  make_note(int grid)
+{
+    note *n = new note;
+
+    n->array = new int*[grid];
+    n->array[grid] = NULL;
+    for (int i = 0; i < grid; i++)
+        n->array[i] = new int[grid];
+    return (*n);
+}
+
+void    npuzzle::setGoal()
+{
+    for (int i = 0; i < _mGridsize; i++)
+    {
+        for (int j = 0; j < _mGridsize; j++)
+            _mGoal->array[i][j] = 0;
+    }
+    for (int i = 0, j = 0, n = 1; _mGoal->array[i] && _mGoal->array[i][j] == 0 && n < _mGridsize * _mGridsize;)
+    {
+        for (; j < _mGridsize && _mGoal->array[i][j] == 0; j++, n++)
+            _mGoal->array[i][j] = n; 
+        j--; i++;
+        for (; i < _mGridsize && _mGoal->array[i][j] == 0; i++, n++)
+            _mGoal->array[i][j] = n;
+        i--; j--;
+        for (; j > -1 && _mGoal->array[i][j] == 0; j--, n++)
+            _mGoal->array[i][j] = n;
+        j++; i--;
+        for (; i > -1 && _mGoal->array[i][j] == 0; i--, n++)
+            _mGoal->array[i][j] = n;
+        i++; j++;
+    }
+    _mGoal->y = _mGridsize/2;
+    _mGridsize % 2 == 0 ? _mGoal->array[_mGridsize / 2][(_mGridsize / 2) -1] = 0 : _mGoal->array[_mGridsize / 2][(_mGridsize / 2)] = 0;
+    _mGridsize % 2 == 0 ? _mGoal->x = (_mGridsize / 2) -1 : _mGoal->x = _mGridsize / 2;
+}
+
 npuzzle::npuzzle()
 {
-    _mFirstNote->array = NULL;
-    _mFirstNote->h = 0;
-    _mFirstNote->g = 0;
 }
 
 void    npuzzle::setFirstNote(std::ifstream & file)
@@ -31,15 +66,21 @@ void    npuzzle::setFirstNote(std::ifstream & file)
         line = line.substr(0, pos+1);
         if ((!line.empty()) && line.find_last_not_of(" \n\r\t\f\v") == '\0')
         {
-            _mFirstNote->array = new int*[atoi(line.c_str()) + 1];
-            _mFirstNote->array[atoi(line.c_str())] = NULL;
-            for (int i = 0; i < atoi(line.c_str()); i++)
-                _mFirstNote->array[i] = new int[atoi(line.c_str())];
+            _mGridsize = atoi(line.c_str());
+           _mFirstNote = std::make_shared<note>(make_note(_mGridsize));
+           _mGoal = std::make_shared<note>(make_note(_mGridsize));
         }
         else if (!line.empty())
         {
             std::stringstream stream(line);
-            for (int i = 0; stream >>_mFirstNote->array[j][i]; i++); 
+            for (int i = 0; stream >>_mFirstNote->array[j][i]; i++)
+            {
+                if (_mFirstNote->array[j][i] == 0)
+                {
+                    _mFirstNote->y = j;
+                    _mFirstNote->x = i;
+                }
+            }
             j++; 
         }
     }
@@ -54,7 +95,81 @@ void    npuzzle::setNote(note & n)
     _mNote.push(n);
 }
 
+const note & npuzzle::getGoal() const
+{
+    return (*_mGoal);
+}
+
 const note &  npuzzle::getNote() const
 {
     return (_mNote.top());
+}
+
+void    npuzzle::print(note const & n)
+{
+    for (int i = 0; i < _mGridsize; i++)
+    {
+        for (int j = 0; j < _mGridsize; j++)
+            std::cout << std::left << std::setw(5) << n.array[i][j];
+        std::cout << std::endl;
+    }
+}
+
+void    npuzzle::setH(note const & n)
+{
+    int h = 0;
+    for (int i=0; i < _mGridsize; i++)
+    {
+        for (int j = 0; j < _mGridsize; j++)
+        {
+            for (int y=0; j < _mGridsize && y < _mGridsize && n.array[i][j] != 0; y++)
+            {
+                for (int x=0; x < _mGridsize; x++)
+                {
+                    if (n.array[i][j] == _mGoal->array[y][x])
+                    {
+                        y > i ? h += y - i : h += i - y;
+                        x > j ? h += x - j : h += j - x;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void    npuzzle::move_up()
+{
+    if (_mFirstNote->y > 0)
+    {
+        std::swap(_mFirstNote->array[_mFirstNote->y][_mFirstNote->x], _mFirstNote->array[_mFirstNote->y - 1][_mFirstNote->x]);
+        _mFirstNote->y--;
+    }
+}
+
+void    npuzzle::move_down()
+{
+    if (_mFirstNote->y < _mGridsize -1)
+    {
+        std::swap(_mFirstNote->array[_mFirstNote->y][_mFirstNote->x], _mFirstNote->array[_mFirstNote->y + 1][_mFirstNote->x]);
+        _mFirstNote->y++;
+    }
+}
+
+void    npuzzle::move_left()
+{
+    if (_mFirstNote->x > 0)
+    {
+        std::swap(_mFirstNote->array[_mFirstNote->y][_mFirstNote->x], _mFirstNote->array[_mFirstNote->y][_mFirstNote->x - 1]);
+        _mFirstNote->x--;
+    }
+}
+
+void    npuzzle::move_right()
+{
+    if (_mFirstNote->x < _mGridsize -1)
+    {
+        std::swap(_mFirstNote->array[_mFirstNote->y][_mFirstNote->x], _mFirstNote->array[_mFirstNote->y][_mFirstNote->x + 1]);
+        _mFirstNote->x++;
+    }
 }

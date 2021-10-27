@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/26 18:24:35 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/10/26 20:47:19 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/10/27 21:48:35 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,13 @@
 
 struct  note
 {
+    note &   operator=(note const & n)
+    {
+        *this = n;
+        return *this;
+    }
     int  **array;
-    int             g, h;
+    int             g, h, x, y;
 };
 
 struct  F
@@ -42,11 +47,21 @@ class   npuzzle{
         void    setFirstNote(std::ifstream & file);
         void    setNote(note & n);
         const note &  getNote() const;
+        void    setGoal();
+        const note &    getGoal() const;
+        void    print(note const & n);
+        void    setH(note const & n);
+        void    move_up();
+        void    move_down();
+        void    move_left();
+        void    move_right();
 
 
 
     private:
-        std::shared_ptr<note>    _mFirstNote = std::make_shared<note>();
+        int                      _mGridsize;
+        std::shared_ptr<note>    _mFirstNote;
+        std::shared_ptr<note>    _mGoal;
         std::priority_queue<note, std::vector<note>, F>   _mNote;
 };
 
