@@ -6,19 +6,32 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/26 18:24:35 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/10/27 21:48:35 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/10/29 21:43:56 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef NPUZZLE_HPP
 # define NPUZZLE_HPP
 
+# include <string>
+# include <ncurses.h>
 # include <iostream>
 # include <fstream>
 # include <sstream>
 # include <memory>
 # include <queue>
 
+enum colors {
+  number_color = 1,
+  zero_color, 
+  blank_color,
+  b_and_w
+};
+
+struct  screen
+{
+    int mY , mX, mHeight, mWidth, mBegY, mBegX, mStartY, mStartX;
+};
 
 struct  note
 {
@@ -42,6 +55,7 @@ struct  F
 class   npuzzle{
     public:
         npuzzle();
+        ~npuzzle();
         
         const note &  getFirstNote() const;
         void    setFirstNote(std::ifstream & file);
@@ -55,14 +69,21 @@ class   npuzzle{
         void    move_down();
         void    move_left();
         void    move_right();
+        bool    getGameover();
+        void    setGameover(bool b);
+        void    setup();
+        void    draw();
+        void    pallet();
 
 
 
     private:
-        int                      _mGridsize;
-        std::shared_ptr<note>    _mFirstNote;
-        std::shared_ptr<note>    _mGoal;
-        std::priority_queue<note, std::vector<note>, F>   _mNote;
+        bool                                                _mGameover;
+        int                                                 _mGridsize;
+        std::shared_ptr<note>                               _mFirstNote;
+        std::shared_ptr<note>                               _mGoal;
+        std::priority_queue<note, std::vector<note>, F>     _mNote;
+        screen                                              _mScreen;
 };
 
 
