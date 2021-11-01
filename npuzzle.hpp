@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/26 18:24:35 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/10/29 21:43:56 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/01 21:48:38 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@
 # include <sstream>
 # include <memory>
 # include <queue>
+# include <thread>
+# include <mutex>
+
+std::mutex  m1;
+
 
 enum colors {
   number_color = 1,
@@ -33,11 +38,18 @@ struct  screen
     int mY , mX, mHeight, mWidth, mBegY, mBegX, mStartY, mStartX;
 };
 
-struct  note
+struct  node
 {
-    note &   operator=(note const & n)
+    node const &   operator=(node const & n)
     {
-        *this = n;
+        int i = 0;
+        this->g = n.g;
+        this->h = n.h;
+        this->x = n.x;
+        this->y = n.y;
+
+        for (; this->array[i] != NULL; i++);
+        std::copy(&n.array[0][0], &n.array[0][0]+(i+1)*(i+1), &this->array[0][0]);
         return *this;
     }
     int  **array;
@@ -46,10 +58,25 @@ struct  note
 
 struct  F
 {
-    bool    operator()(const note& a, const note& b)
+    bool    operator()(const node& a, const node& b)
     {
         return (a.h + a.g  > b.h + b.g);
     }
+};
+
+class   display{
+    public:
+        display();
+        ~display();
+        
+
+        void    setup();
+        void    draw(node const & N);
+        void    pallet();
+
+    private:
+        screen                                              _mScreen;
+        int                                                 _mGridsize;        
 };
 
 class   npuzzle{
@@ -57,33 +84,30 @@ class   npuzzle{
         npuzzle();
         ~npuzzle();
         
-        const note &  getFirstNote() const;
-        void    setFirstNote(std::ifstream & file);
-        void    setNote(note & n);
-        const note &  getNote() const;
+        const node &  getFirstNode() const;
+        const node & copyNode(node const & n);
+        void    setFirstNode(std::ifstream & file);
+        void    setNode(node const & n);
+        const node &  getNode() const;
         void    setGoal();
-        const note &    getGoal() const;
-        void    print(note const & n);
-        void    setH(note const & n);
-        void    move_up();
-        void    move_down();
-        void    move_left();
-        void    move_right();
+        const node &    getGoal() const;
+        void    print(node const & n);
+        void    setH(node const & n);
+        void    move_up(node & n);
+        void    move_down(node & n);
+        void    move_left(node & n);
+        void    move_right(node & n);
+        void    puzzle();
+        void    movements(node const & n, std::string s);
         bool    getGameover();
         void    setGameover(bool b);
-        void    setup();
-        void    draw();
-        void    pallet();
-
-
 
     private:
         bool                                                _mGameover;
         int                                                 _mGridsize;
-        std::shared_ptr<note>                               _mFirstNote;
-        std::shared_ptr<note>                               _mGoal;
-        std::priority_queue<note, std::vector<note>, F>     _mNote;
-        screen                                              _mScreen;
+        std::shared_ptr<node>                               _mFirstNode;
+        std::shared_ptr<node>                               _mGoal;
+        std::priority_queue<node, std::vector<node>, F>     _mNode;
 };
 
 

@@ -12,15 +12,77 @@
 
 #include "npuzzle.hpp"
 
-note const &  make_note(int grid)
+
+display::display()
 {
-    note *n = new note;
+}
+
+display::~display(){
+    clear();
+	endwin();
+}
+
+void    display::setup()
+{
+    // initscr();
+	// cbreak(); 
+	// noecho(); // suppress automatic echo of typed input
+    // // raw();
+	// curs_set(0); // make cursor invisible
+    // refresh();pallet();
+    box(stdscr, 0 , 0);
+	refresh();
+    getyx(stdscr, _mScreen.mY, _mScreen.mX);
+    getbegyx(stdscr, _mScreen.mBegY, _mScreen.mBegX);
+	getmaxyx(stdscr, _mScreen.mHeight, _mScreen.mWidth);
+    _mScreen.mStartY = _mScreen.mHeight / 2 - ((3 * _mGridsize) / 2);
+    _mScreen.mStartX = _mScreen.mWidth / 2 - ((3 * _mGridsize) / 2);
+    // _mBoard = newwin(_mGridsize *3 +1, _mGridsize *3 +1, _mScreen.mStartY, _mScreen.mStartX);
+    
+    refresh();
+}
+
+void    display::pallet()
+{
+    start_color(); 
+	init_pair(number_color, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(zero_color, COLOR_RED, COLOR_BLACK);
+	init_pair(blank_color, COLOR_BLACK, COLOR_BLACK);
+	init_pair(b_and_w, COLOR_WHITE, COLOR_BLACK);
+}
+
+void    display::draw(node const & N)
+{
+    clear();
+    box(stdscr, 0, 0);
+	attron(COLOR_PAIR(number_color));
+	for (int y = 0, j = 0; y < _mGridsize; y++, j+=3)
+	{
+        for (int x = 0, i = 0; x < _mGridsize; x++, i+=3)
+        {
+            if (N.array[y][x] == 0)
+            {
+            	attron(COLOR_PAIR(zero_color));
+    		    mvprintw(j + _mScreen.mStartY, i + _mScreen.mStartX, "%d", N.array[y][x]);
+            	attron(COLOR_PAIR(number_color));
+            }    
+            else
+                mvprintw(j + _mScreen.mStartY, i + _mScreen.mStartX, "%d", N.array[y][x]);
+        }
+    }
+	attron(COLOR_PAIR(b_and_w));
+	refresh();
+}
+
+node const &  make_node(int grid)
+{
+    std::unique_ptr<node> n(new node);
 
     n->array = new int*[grid];
     n->array[grid] = NULL;
     for (int i = 0; i < grid; i++)
         n->array[i] = new int[grid];
-    return (*n);
+    return (std::move(*n));
 }
 
 void    npuzzle::setGoal()
@@ -52,22 +114,14 @@ void    npuzzle::setGoal()
 
 npuzzle::npuzzle()
 {
-    initscr();
-	cbreak(); 
-	noecho(); // suppress automatic echo of typed input
-    // raw();
-	curs_set(0); // make cursor invisible
-    refresh();
     _mGameover = false;
 }
 
 npuzzle::~npuzzle()
 {
-    clear();
-	endwin();
 }
 
-void    npuzzle::setFirstNote(std::ifstream & file)
+void    npuzzle::setFirstNode(std::ifstream & file)
 {
     int pos;
     std::string line;
@@ -80,18 +134,18 @@ void    npuzzle::setFirstNote(std::ifstream & file)
         if ((!line.empty()) && line.find_last_not_of(" \n\r\t\f\v") == '\0')
         {
             _mGridsize = atoi(line.c_str());
-           _mFirstNote = std::make_shared<note>(make_note(_mGridsize));
-           _mGoal = std::make_shared<note>(make_note(_mGridsize));
+           _mFirstNode = std::make_shared<node>(make_node(_mGridsize));
+           _mGoal = std::make_shared<node>(make_node(_mGridsize));
         }
         else if (!line.empty())
         {
             std::stringstream stream(line);
-            for (int i = 0; stream >>_mFirstNote->array[j][i]; i++)
+            for (int i = 0; stream >>_mFirstNode->array[j][i]; i++)
             {
-                if (_mFirstNote->array[j][i] == 0)
+                if (_mFirstNode->array[j][i] == 0)
                 {
-                    _mFirstNote->y = j;
-                    _mFirstNote->x = i;
+                    _mFirstNode->y = j;
+                    _mFirstNode->x = i;
                 }
             }
             j++; 
@@ -99,26 +153,33 @@ void    npuzzle::setFirstNote(std::ifstream & file)
     }
 }
 
-const note & npuzzle::getFirstNote() const{
-    return(*_mFirstNote);
+const node & npuzzle::getFirstNode() const{
+    return(*_mFirstNode);
 }
 
-void    npuzzle::setNote(note & n)
+void    npuzzle::setNode(node const & n)
 {
-    _mNote.push(n);
+    _mNode.push(n);
 }
 
-const note & npuzzle::getGoal() const
+const node &  npuzzle::copyNode(node const & n){
+    node const &copy = make_node(_mGridsize);
+    const_cast<node&>(copy) = n;
+    return copy;
+}
+
+
+const node & npuzzle::getGoal() const
 {
     return (*_mGoal);
 }
 
-const note &  npuzzle::getNote() const
+const node &  npuzzle::getNode() const
 {
-    return (_mNote.top());
+    return (_mNode.top());
 }
 
-void    npuzzle::print(note const & n)
+void    npuzzle::print(node const & n)
 {
     for (int i = 0; i < _mGridsize; i++)
     {
@@ -128,7 +189,7 @@ void    npuzzle::print(note const & n)
     }
 }
 
-void    npuzzle::setH(note const & n)
+void    npuzzle::setH(node const & n)
 {
     int h = 0;
     for (int i=0; i < _mGridsize; i++)
@@ -151,39 +212,39 @@ void    npuzzle::setH(note const & n)
     }
 }
 
-void    npuzzle::move_up()
+void    npuzzle::move_up(node & n)
 {
-    if (_mFirstNote->y > 0)
+    if (n.y > 0)
     {
-        std::swap(_mFirstNote->array[_mFirstNote->y][_mFirstNote->x], _mFirstNote->array[_mFirstNote->y - 1][_mFirstNote->x]);
-        _mFirstNote->y--;
+        std::swap(n.array[n.y][n.x], n.array[_mFirstNode->y - 1][n.x]);
+        n.y--;
     }
 }
 
-void    npuzzle::move_down()
+void    npuzzle::move_down(node & n)
 {
-    if (_mFirstNote->y < _mGridsize -1)
+    if (n.y < _mGridsize -1)
     {
-        std::swap(_mFirstNote->array[_mFirstNote->y][_mFirstNote->x], _mFirstNote->array[_mFirstNote->y + 1][_mFirstNote->x]);
-        _mFirstNote->y++;
+        std::swap(n.array[n.y][n.x], n.array[n.y + 1][n.x]);
+        n.y++;
     }
 }
 
-void    npuzzle::move_left()
+void    npuzzle::move_left(node & n)
 {
-    if (_mFirstNote->x > 0)
+    if (n.x > 0)
     {
-        std::swap(_mFirstNote->array[_mFirstNote->y][_mFirstNote->x], _mFirstNote->array[_mFirstNote->y][_mFirstNote->x - 1]);
-        _mFirstNote->x--;
+        std::swap(n.array[n.y][n.x], n.array[n.y][n.x - 1]);
+        n.x--;
     }
 }
 
-void    npuzzle::move_right()
+void    npuzzle::move_right(node & n)
 {
-    if (_mFirstNote->x < _mGridsize -1)
+    if (n.x < _mGridsize -1)
     {
-        std::swap(_mFirstNote->array[_mFirstNote->y][_mFirstNote->x], _mFirstNote->array[_mFirstNote->y][_mFirstNote->x + 1]);
-        _mFirstNote->x++;
+        std::swap(n.array[n.y][n.x], n.array[n.y][n.x + 1]);
+        n.x++;
     }
 }
 
@@ -197,50 +258,45 @@ void    npuzzle::setGameover(bool b)
     _mGameover = b;
 }
 
-void    npuzzle::setup()
-{
-    pallet();
-    box(stdscr, 0 , 0);
-	refresh();
-    getyx(stdscr, _mScreen.mY, _mScreen.mX);
-    getbegyx(stdscr, _mScreen.mBegY, _mScreen.mBegX);
-	getmaxyx(stdscr, _mScreen.mHeight, _mScreen.mWidth);
-    _mScreen.mStartY = _mScreen.mHeight / 2 - ((3 * _mGridsize) / 2);
-    _mScreen.mStartX = _mScreen.mWidth / 2 - ((3 * _mGridsize) / 2);
-    _mBoard = newwin(_mGridsize *3 +1, _mGridsize *3 +1, _mScreen.mStartY, _mScreen.mStartX);
-    
-    refresh();
-}
 
-void    npuzzle::pallet()
+void npuzzle::movements(node const & n, std::string s)
 {
-    start_color(); 
-	init_pair(number_color, COLOR_YELLOW, COLOR_BLACK);
-	init_pair(zero_color, COLOR_RED, COLOR_BLACK);
-	init_pair(blank_color, COLOR_BLACK, COLOR_BLACK);
-	init_pair(b_and_w, COLOR_WHITE, COLOR_BLACK);
-}
+    std::string moves[4] = {"UP", "DOWN", "LEFT", "RIGHT"};
+    void    (npuzzle::*p2f[])(node &n) = {&npuzzle::move_up, &npuzzle::move_down, &npuzzle::move_left, &npuzzle::move_right};
 
-void    npuzzle::draw()
-{
-    
-    clear();
-    box(stdscr, 0, 0);
-	attron(COLOR_PAIR(number_color));
-	for (int y = 0, j = 0; y < _mGridsize; y++, j+=3)
-	{
-        for (int x = 0, i = 0; x < _mGridsize; x++, i+=3)
+    node    tmp = copyNode(n);
+
+    for (int i = 0; i < 4; i++)
+    {
+        if (moves[i] == s)
         {
-            if (_mFirstNote->array[y][x] == 0)
-            {
-            	attron(COLOR_PAIR(zero_color));
-    		    mvprintw(j + _mScreen.mStartY, i + _mScreen.mStartX, "%d", _mFirstNote->array[y][x]);
-            	attron(COLOR_PAIR(number_color));
-            }    
-            else
-                mvprintw(j + _mScreen.mStartY, i + _mScreen.mStartX, "%d", _mFirstNote->array[y][x]);
+            tmp.g++;
+            (this->*p2f[i])(tmp);
+            setH(tmp);
+            m1.lock();
+            setNode(tmp);
+            m1.unlock();
         }
     }
-	attron(COLOR_PAIR(b_and_w));
-	refresh();
+}
+
+void npuzzle::puzzle()
+{
+    node    n;
+
+    n = _mNode.size() == 0? getFirstNode() : getNode();
+    if (n.x > 0)
+        std::thread move1(npuzzle::movements, n, "LEFT");
+    if (n.x < _mGridsize -1)
+        std::thread move2(this->movements, n, "RIGHT");
+        // movements(n, "RIGHT");
+    if (n.y > 0)
+        std::thread move3(this->movements(), n, "UP");
+        // movements(n, "UP");
+    if (n.y < _mGridsize -1)
+        std::thread move4(movements(n, "DOWN"));
+        // movements(n, "DOWN");
+    
+    move1.join();
+    
 }
