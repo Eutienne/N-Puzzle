@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/26 18:24:35 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/01 21:48:38 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/03 21:38:24 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,30 @@
 # define NPUZZLE_HPP
 
 # include <string>
-# include <ncurses.h>
+// # include <ncurses.h>
 # include <iostream>
 # include <fstream>
 # include <sstream>
 # include <memory>
 # include <queue>
-# include <thread>
-# include <mutex>
+# include <set>
 
-std::mutex  m1;
+// enum colors {
+//   number_color = 1,
+//   zero_color, 
+//   blank_color,
+//   b_and_w
+// };
 
-
-enum colors {
-  number_color = 1,
-  zero_color, 
-  blank_color,
-  b_and_w
-};
-
-struct  screen
-{
-    int mY , mX, mHeight, mWidth, mBegY, mBegX, mStartY, mStartX;
-};
+// struct  screen
+// {
+//     int mY , mX, mHeight, mWidth, mBegY, mBegX, mStartY, mStartX;
+// };
 
 struct  node
 {
-    node const &   operator=(node const & n)
+    
+    node const &   operator=(node & n)
     {
         int i = 0;
         this->g = n.g;
@@ -54,30 +51,46 @@ struct  node
     }
     int  **array;
     int             g, h, x, y;
+    std::shared_ptr<struct node>    prev;
 };
 
 struct  F
 {
-    bool    operator()(const node& a, const node& b)
+    bool    operator()(std::shared_ptr<node>& a, std::shared_ptr<node>& b)
     {
-        return (a.h + a.g  > b.h + b.g);
+        return (a->h + a->g  > b->h + b->g);
     }
 };
 
-class   display{
-    public:
-        display();
-        ~display();
+struct  Puzzle{
+    bool operator()(std::shared_ptr<node>& a, std::shared_ptr<node>& b)
+    {
+        for (int y = 0; a->array[y] || b->array[y]; y++)
+        {
+            for (int x = 0; a->array[y][x] || b->array[y][x]; x++)
+            {
+                if (!(a->array[y][x] || b->array[y][x]) || (a->array[y][x] == b->array[y][x]))
+                    return (false);
+            }
+        }
+        return (true);
+    }
+};
+
+// class   display{
+//     public:
+//         display();
+//         ~display();
         
 
-        void    setup();
-        void    draw(node const & N);
-        void    pallet();
+//         void    setup();
+//         void    draw(node const & N);
+//         void    pallet();
 
-    private:
-        screen                                              _mScreen;
-        int                                                 _mGridsize;        
-};
+//     private:
+//         screen                                              _mScreen;
+//         int                                                 _mGridsize;        
+// };
 
 class   npuzzle{
     public:
@@ -85,20 +98,21 @@ class   npuzzle{
         ~npuzzle();
         
         const node &  getFirstNode() const;
-        const node & copyNode(node const & n);
+        std::shared_ptr<node> copyNode(std::shared_ptr<node> const & n);
         void    setFirstNode(std::ifstream & file);
-        void    setNode(node const & n);
-        const node &  getNode() const;
+        void    setNode(std::shared_ptr<node> const & n);
+        const std::shared_ptr<node> &  getNode() const;
+        int  getNodeSize() const;
         void    setGoal();
         const node &    getGoal() const;
         void    print(node const & n);
-        void    setH(node const & n);
+        void    setH(std::shared_ptr<node> & n);
         void    move_up(node & n);
         void    move_down(node & n);
         void    move_left(node & n);
         void    move_right(node & n);
         void    puzzle();
-        void    movements(node const & n, std::string s);
+        void    movements(std::shared_ptr<node> const & n, std::string s);
         bool    getGameover();
         void    setGameover(bool b);
 
@@ -107,17 +121,9 @@ class   npuzzle{
         int                                                 _mGridsize;
         std::shared_ptr<node>                               _mFirstNode;
         std::shared_ptr<node>                               _mGoal;
-        std::priority_queue<node, std::vector<node>, F>     _mNode;
+        std::priority_queue<std::shared_ptr<node>, std::vector<std::shared_ptr<node> >, F>     _mNode;
+        std::priority_queue<std::shared_ptr<node>, std::vector<std::shared_ptr<node> >, F>     _mNode2;
+        // std::set<std::shared_ptr<node>, Puzzle>                                                _mClosed;
 };
-
-
-
-
-
-
-
-
-
-
 
 #endif

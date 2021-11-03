@@ -13,76 +13,75 @@
 #include "npuzzle.hpp"
 
 
-display::display()
-{
-}
+// display::display()
+// {
+// }
 
-display::~display(){
-    clear();
-	endwin();
-}
+// display::~display(){
+//     clear();
+// 	endwin();
+// }
 
-void    display::setup()
-{
-    // initscr();
-	// cbreak(); 
-	// noecho(); // suppress automatic echo of typed input
-    // // raw();
-	// curs_set(0); // make cursor invisible
-    // refresh();pallet();
-    box(stdscr, 0 , 0);
-	refresh();
-    getyx(stdscr, _mScreen.mY, _mScreen.mX);
-    getbegyx(stdscr, _mScreen.mBegY, _mScreen.mBegX);
-	getmaxyx(stdscr, _mScreen.mHeight, _mScreen.mWidth);
-    _mScreen.mStartY = _mScreen.mHeight / 2 - ((3 * _mGridsize) / 2);
-    _mScreen.mStartX = _mScreen.mWidth / 2 - ((3 * _mGridsize) / 2);
-    // _mBoard = newwin(_mGridsize *3 +1, _mGridsize *3 +1, _mScreen.mStartY, _mScreen.mStartX);
+// void    display::setup()
+// {
+//     // initscr();
+// 	// cbreak(); 
+// 	// noecho(); // suppress automatic echo of typed input
+//     // // raw();
+// 	// curs_set(0); // make cursor invisible
+//     // refresh();pallet();
+//     box(stdscr, 0 , 0);
+// 	refresh();
+//     getyx(stdscr, _mScreen.mY, _mScreen.mX);
+//     getbegyx(stdscr, _mScreen.mBegY, _mScreen.mBegX);
+// 	getmaxyx(stdscr, _mScreen.mHeight, _mScreen.mWidth);
+//     _mScreen.mStartY = _mScreen.mHeight / 2 - ((3 * _mGridsize) / 2);
+//     _mScreen.mStartX = _mScreen.mWidth / 2 - ((3 * _mGridsize) / 2);
+//     // _mBoard = newwin(_mGridsize *3 +1, _mGridsize *3 +1, _mScreen.mStartY, _mScreen.mStartX);
     
-    refresh();
-}
+//     refresh();
+// }
 
-void    display::pallet()
+// void    display::pallet()
+// {
+//     start_color(); 
+// 	init_pair(number_color, COLOR_YELLOW, COLOR_BLACK);
+// 	init_pair(zero_color, COLOR_RED, COLOR_BLACK);
+// 	init_pair(blank_color, COLOR_BLACK, COLOR_BLACK);
+// 	init_pair(b_and_w, COLOR_WHITE, COLOR_BLACK);
+// }
+
+// void    display::draw(node const & N)
+// {
+//     clear();
+//     box(stdscr, 0, 0);
+// 	attron(COLOR_PAIR(number_color));
+// 	for (int y = 0, j = 0; y < _mGridsize; y++, j+=3)
+// 	{
+//         for (int x = 0, i = 0; x < _mGridsize; x++, i+=3)
+//         {
+//             if (N.array[y][x] == 0)
+//             {
+//             	attron(COLOR_PAIR(zero_color));
+//     		    mvprintw(j + _mScreen.mStartY, i + _mScreen.mStartX, "%d", N.array[y][x]);
+//             	attron(COLOR_PAIR(number_color));
+//             }    
+//             else
+//                 mvprintw(j + _mScreen.mStartY, i + _mScreen.mStartX, "%d", N.array[y][x]);
+//         }
+//     }
+// 	attron(COLOR_PAIR(b_and_w));
+// 	refresh();
+// }
+
+std::shared_ptr<node>  make_node(int grid)
 {
-    start_color(); 
-	init_pair(number_color, COLOR_YELLOW, COLOR_BLACK);
-	init_pair(zero_color, COLOR_RED, COLOR_BLACK);
-	init_pair(blank_color, COLOR_BLACK, COLOR_BLACK);
-	init_pair(b_and_w, COLOR_WHITE, COLOR_BLACK);
-}
-
-void    display::draw(node const & N)
-{
-    clear();
-    box(stdscr, 0, 0);
-	attron(COLOR_PAIR(number_color));
-	for (int y = 0, j = 0; y < _mGridsize; y++, j+=3)
-	{
-        for (int x = 0, i = 0; x < _mGridsize; x++, i+=3)
-        {
-            if (N.array[y][x] == 0)
-            {
-            	attron(COLOR_PAIR(zero_color));
-    		    mvprintw(j + _mScreen.mStartY, i + _mScreen.mStartX, "%d", N.array[y][x]);
-            	attron(COLOR_PAIR(number_color));
-            }    
-            else
-                mvprintw(j + _mScreen.mStartY, i + _mScreen.mStartX, "%d", N.array[y][x]);
-        }
-    }
-	attron(COLOR_PAIR(b_and_w));
-	refresh();
-}
-
-node const &  make_node(int grid)
-{
-    std::unique_ptr<node> n(new node);
-
-    n->array = new int*[grid];
+    std::shared_ptr<node> n = std::make_shared<node>();
+    n->array = new int*[grid+1];
     n->array[grid] = NULL;
     for (int i = 0; i < grid; i++)
         n->array[i] = new int[grid];
-    return (std::move(*n));
+    return (n);
 }
 
 void    npuzzle::setGoal()
@@ -134,8 +133,10 @@ void    npuzzle::setFirstNode(std::ifstream & file)
         if ((!line.empty()) && line.find_last_not_of(" \n\r\t\f\v") == '\0')
         {
             _mGridsize = atoi(line.c_str());
-           _mFirstNode = std::make_shared<node>(make_node(_mGridsize));
-           _mGoal = std::make_shared<node>(make_node(_mGridsize));
+           _mFirstNode = make_node(_mGridsize);
+           _mGoal = make_node(_mGridsize);
+           _mFirstNode->g = 0;
+           _mFirstNode->prev = NULL;
         }
         else if (!line.empty())
         {
@@ -157,14 +158,26 @@ const node & npuzzle::getFirstNode() const{
     return(*_mFirstNode);
 }
 
-void    npuzzle::setNode(node const & n)
+void    npuzzle::setNode(std::shared_ptr<node> const & n)
 {
     _mNode.push(n);
 }
 
-const node &  npuzzle::copyNode(node const & n){
-    node const &copy = make_node(_mGridsize);
-    const_cast<node&>(copy) = n;
+std::shared_ptr<node>  npuzzle::copyNode(std::shared_ptr<node> const & n){
+    std::shared_ptr<node> copy = make_node(_mGridsize);
+
+    node tmp = *n;
+    copy->g = tmp.g;
+    copy->h = tmp.h;
+    copy->x = tmp.x;
+    copy->y = tmp.y;
+    copy->prev = n;
+
+    for (int y = 0; y < _mGridsize; y++)
+    {
+        for (int x = 0; x < _mGridsize; x++)
+            copy->array[y][x] = tmp.array[y][x];
+    }
     return copy;
 }
 
@@ -174,7 +187,7 @@ const node & npuzzle::getGoal() const
     return (*_mGoal);
 }
 
-const node &  npuzzle::getNode() const
+const std::shared_ptr<node> &  npuzzle::getNode() const
 {
     return (_mNode.top());
 }
@@ -189,18 +202,18 @@ void    npuzzle::print(node const & n)
     }
 }
 
-void    npuzzle::setH(node const & n)
+void    npuzzle::setH(std::shared_ptr<node> & n)
 {
     int h = 0;
     for (int i=0; i < _mGridsize; i++)
     {
         for (int j = 0; j < _mGridsize; j++)
         {
-            for (int y=0; j < _mGridsize && y < _mGridsize && n.array[i][j] != 0; y++)
+            for (int y=0; j < _mGridsize && y < _mGridsize && n->array[i][j] != 0; y++)
             {
                 for (int x=0; x < _mGridsize; x++)
                 {
-                    if (n.array[i][j] == _mGoal->array[y][x])
+                    if (n->array[i][j] == _mGoal->array[y][x])
                     {
                         y > i ? h += y - i : h += i - y;
                         x > j ? h += x - j : h += j - x;
@@ -210,13 +223,14 @@ void    npuzzle::setH(node const & n)
             }
         }
     }
+    n->h = h;
 }
 
 void    npuzzle::move_up(node & n)
 {
     if (n.y > 0)
     {
-        std::swap(n.array[n.y][n.x], n.array[_mFirstNode->y - 1][n.x]);
+        std::swap(n.array[n.y][n.x], n.array[n.y - 1][n.x]);
         n.y--;
     }
 }
@@ -259,44 +273,51 @@ void    npuzzle::setGameover(bool b)
 }
 
 
-void npuzzle::movements(node const & n, std::string s)
+void npuzzle::movements(std::shared_ptr<node> const & n, std::string s)
 {
     std::string moves[4] = {"UP", "DOWN", "LEFT", "RIGHT"};
     void    (npuzzle::*p2f[])(node &n) = {&npuzzle::move_up, &npuzzle::move_down, &npuzzle::move_left, &npuzzle::move_right};
 
-    node    tmp = copyNode(n);
+    std::shared_ptr<node>    tmp = copyNode(n);
 
     for (int i = 0; i < 4; i++)
     {
         if (moves[i] == s)
         {
-            tmp.g++;
-            (this->*p2f[i])(tmp);
+            tmp->g++;
+            (this->*p2f[i])(*tmp);
             setH(tmp);
-            m1.lock();
             setNode(tmp);
-            m1.unlock();
+            break;
         }
     }
 }
 
 void npuzzle::puzzle()
 {
-    node    n;
+    std::shared_ptr<node>    n;
 
-    n = _mNode.size() == 0? getFirstNode() : getNode();
-    if (n.x > 0)
-        std::thread move1(npuzzle::movements, n, "LEFT");
-    if (n.x < _mGridsize -1)
-        std::thread move2(this->movements, n, "RIGHT");
-        // movements(n, "RIGHT");
-    if (n.y > 0)
-        std::thread move3(this->movements(), n, "UP");
-        // movements(n, "UP");
-    if (n.y < _mGridsize -1)
-        std::thread move4(movements(n, "DOWN"));
-        // movements(n, "DOWN");
-    
-    move1.join();
-    
+    n = std::make_shared<node>(getFirstNode());
+    setH(n);
+    setNode(n);
+    for (;n->h != 0; n = getNode())
+    {
+        _mNode.pop();
+        if (n->h == 0)
+            break;
+        if (n->prev == NULL || (n->x < _mGridsize -1 && n->h != 0 && n->prev->x != n->x +1))
+            movements(n, "RIGHT");
+        if (n->prev == NULL || (n->y > 0 && n->h != 0 && n->prev->y != n->y -1))
+            movements(n, "UP");
+        if (n->prev == NULL || (n->y < _mGridsize -1 && n->h != 0 && n->prev->y != n->y +1))
+            movements(n, "DOWN");
+        if (n->prev == NULL || (n->x > 0 && n->h != 0 && n->prev->x != n->x -1))
+            movements(n, "LEFT");
+        _mNode2.push(n);
+    }
+    for (; n; n = n->prev)
+    {
+        std::cout << "________________\n";
+        print(*n);
+    }
 }
