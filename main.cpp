@@ -6,12 +6,12 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/23 20:47:13 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/02 17:48:58 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/04 21:57:48 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "npuzzle.hpp"
-#include <functional>
+#include "nsolver.hpp"
 
 int main(int argc, char **argv)
 {
@@ -20,11 +20,15 @@ int main(int argc, char **argv)
     
     if (file.is_open())
     {
-        P.setFirstNode(file);
+        P.setNode(file);
         file.close();
-        P.setGoal();
-        P.puzzle();
+        // P.setGoal();
+        // P.puzzle();
     }
+    nsolver         S(P.getNode());
+    S.puzzle();
+    
+
     // P.print(*std::make_shared<node>(P.getFirstNode()));
     // P.setNode(P.getFirstNode());
     // for (node n; P.getNodeSize() != 0; n = P.getNode())
