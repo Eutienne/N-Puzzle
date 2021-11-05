@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/04 22:32:35 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/05 20:24:57 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void    nsolver::setOpen(std::shared_ptr<node> const & n)
     _mOpen.push(n);
 }
 
-void    nsolver::setH(std::shared_ptr<node> & n)
+void    nsolver::manhattan(std::shared_ptr<node> & n)
 {
     int h = 0;
     for (int i=0; i < _mGridsize; i++)
@@ -116,7 +116,57 @@ void    nsolver::setH(std::shared_ptr<node> & n)
             }
         }
     }
-    n->h = h;
+    n->h = h;  
+}
+void    nsolver::euclidean(std::shared_ptr<node> & n)
+{
+    int h = 0;
+    for (int i=0; i < _mGridsize; i++)
+    {
+        for (int j = 0; j < _mGridsize; j++)
+        {
+            for (int y=0; j < _mGridsize && y < _mGridsize && n->array[i][j] != 0; y++)
+            {
+                for (int x=0, tmp1 =0, tmp2 = 0; x < _mGridsize; x++)
+                {
+                    if (n->array[i][j] == _mGoal->array[y][x])
+                    {
+                        y > i ? tmp1 = y - i : tmp1 = i - y;
+                        x > j ? tmp2 = x - j : tmp2 = j - x;
+                        h += sqrt((tmp1 * tmp1) + (tmp2 * tmp2));
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    n->h = h;  
+}
+void    nsolver::hamming(std::shared_ptr<node> & n)
+{
+    int h = 0;
+    for (int y = 0; y < _mGridsize; y++)
+    {
+        for (int x = 0; x < _mGridsize; x++)
+            n->array[y][x] != _mGoal->array[y][x] ? h++ : h = h;
+    }
+
+}
+
+void    nsolver::setH(std::shared_ptr<node> & n)
+{
+    std::string moves[2] = {"EUCLIDEAN", "HAMMING"};
+    void    (nsolver::*p2f[])(std::shared_ptr<node> & n) = {&nsolver::euclidean, &nsolver::hamming};
+
+    for (int i = 0; i < 2; i++)
+    {
+        if (moves[i] == n->s)
+        {
+            (this->*p2f[i])(n);
+            return ;
+        }
+    }
+    manhattan(n);
 }
 
 std::shared_ptr<node>  nsolver::copyNode(std::shared_ptr<node> const & n){

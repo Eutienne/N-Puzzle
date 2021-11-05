@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 12:12:02 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/04 12:12:25 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/05 13:22:05 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,22 @@
 
 display::display()
 {
+    _mGameover = false;
 }
 
 display::~display(){
     clear();
 	endwin();
+}
+
+bool    display::getGameover()
+{
+    return (_mGameover);
+}
+
+void    display::setGameover(bool b)
+{
+    _mGameover = b;
 }
 
 void    display::setup()

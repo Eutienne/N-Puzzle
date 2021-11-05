@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:51:58 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/04 22:17:39 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/05 20:31:44 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <set>
 # include <iostream>
 # include <iomanip>
+# include <math.h>
 
 struct  F
 {
@@ -39,7 +40,9 @@ public:
     std::shared_ptr<node> copyNode(std::shared_ptr<node> const & n);
     
     void    print(node const & n);
-
+    void    manhattan(std::shared_ptr<node> & n);
+    void    euclidean(std::shared_ptr<node> & n);
+    void    hamming(std::shared_ptr<node> & n);
     void    move_up(node & n);
     void    move_down(node & n);
     void    move_left(node & n);

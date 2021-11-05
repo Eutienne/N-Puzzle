@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 12:08:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/04 12:28:08 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/05 13:20:24 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,13 @@ class   display{
         void    setup();
         void    draw(node const & N);
         void    pallet();
-
+        bool    getGameover();
+        void    setGameover(bool b);
+    
     private:
         screen                                              _mScreen;
         int                                                 _mGridsize;        
+        bool                                                _mGameover;
 };
 
 

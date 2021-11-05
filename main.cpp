@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/23 20:47:13 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/04 21:57:48 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/05 19:49:32 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,27 @@
 
 int main(int argc, char **argv)
 {
-    std::ifstream   file(argv[1]);
     npuzzle         P;
-    
+    int             i;
+
+    if (argc > 3 || argc < 2)
+    {
+        std::cout << "wrong arguments" << std::endl;
+        exit(-1);
+    }
+    argc == 3? i = 2: i = 1;
+    std::ifstream   file(argv[i]);
     if (file.is_open())
     {
         P.setNode(file);
         file.close();
-        // P.setGoal();
-        // P.puzzle();
+        if (i == 2)
+            P.setHmethod(argv[1]);
+    }
+    else
+    {
+        std::cout << "can't read last argument" << std::endl;
+        exit(1);
     }
     nsolver         S(P.getNode());
     S.puzzle();

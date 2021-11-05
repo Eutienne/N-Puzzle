@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:51:10 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/04 18:36:43 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/05 17:18:12 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ struct   node{
 
     int  **array;
     int             g, h, x, y, gridsize;
+    std::string     s;
     std::shared_ptr<struct node>    prev;
 };
 
