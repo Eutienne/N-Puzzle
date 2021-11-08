@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:51:58 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/05 20:31:44 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/08 22:32:19 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@
 # include <iostream>
 # include <iomanip>
 # include <math.h>
+# include <unordered_map>
+
+enum moves {
+  UP = 0,
+  DOWN, 
+  LEFT,
+  RIGHT
+};
 
 struct  F
 {
@@ -47,13 +55,14 @@ public:
     void    move_down(node & n);
     void    move_left(node & n);
     void    move_right(node & n);
-    void    movements(std::shared_ptr<node> const & n, std::string s);
+    void    movements(std::shared_ptr<node> const & n, moves m);
     void    puzzle();
 
 
     void    setOpen(std::shared_ptr<node> const & n);
     void    setH(std::shared_ptr<node> & n);
     void    setGoal();
+    void    setmGoal();
     
     const std::shared_ptr<node> &   getOpen() const;
     const node &                    getGoal() const;
@@ -65,9 +74,9 @@ private:
     int                                                                                     _mGridsize;
     std::shared_ptr<node>                                                                   _mFirstNode;
     std::shared_ptr<node>                                                                   _mGoal;
+    std::pair<int,int>*                                                                     _mmGoal;
     std::priority_queue<std::shared_ptr<node>, std::vector<std::shared_ptr<node> >, F>      _mOpen;
     std::set<std::shared_ptr<node>, Puzzle>                                                 _mClosed;
-
 };
 
 
