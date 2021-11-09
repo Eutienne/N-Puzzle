@@ -12,6 +12,7 @@
 
 #include "nsolver.hpp"
 
+// AL: you definitely don't need to use std::shared_ptr here, use 'const node&' parameters
 bool    F::operator()(std::shared_ptr<node>& a, std::shared_ptr<node>& b)
 {
         return (a->h + a->g  > b->h + b->g);
@@ -22,6 +23,7 @@ bool Puzzle::operator()(const std::shared_ptr<node>& a, const std::shared_ptr<no
         return (a->array != b->array);
 }
 
+// AL: all the member variables should be initialized in the constructor, init _mmGoal and _mGridsize here, otherwise, don't create this constructor, use '= default` instead
 nsolver::nsolver()
 {
 }
@@ -31,6 +33,7 @@ nsolver::nsolver(node const & n)
 {
     // _mGoal = make_node(_mGridsize);
     // this->setGoal();
+    // AL: put _mFirstNode initialization in initialization list
     _mFirstNode = std::make_shared<node>(n);
     setmGoal();
 }
@@ -50,6 +53,7 @@ void    nsolver::print(node const & n)
     }
 }
 
+// AL: is this function used?
 const node & nsolver::getGoal() const
 {
     return (*_mGoal);
@@ -145,10 +149,11 @@ void    nsolver::euclidean(std::shared_ptr<node> & n)
     n->h = h;  
 }
 
-
+// AL: no need to us shared_ptr here as well, use 'node&'
 void    nsolver::hamming(std::shared_ptr<node> & n)
 {
     int h = 0;
+    // AL: if you used std::vector<> instead of int**, you could use std::accumulate
     for (int y = 0; y < _mGridsize; y++)
     {
         for (int x = 0; x < _mGridsize; x++)
@@ -243,6 +248,7 @@ void nsolver::puzzle()
     for (;n->h != 0; n = getOpen())
     {
         _mOpen.pop();
+        // AL: this condition is redundant, as you already have 'n->h != 0' in the 'for' loop
         if (n->h == 0)
             break;
         if ((!(n->prev)) || (n->x < _mGridsize -1 && n->h != 0 && n->prev->x != n->x +1))

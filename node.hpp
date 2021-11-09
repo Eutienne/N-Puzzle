@@ -23,9 +23,12 @@ enum heuristics {
 
 struct   node{
 
+// AL: operator= should return 'node&' not 'const node&'
     node const &   operator=(node & n);
 
+// AL: use 'std::vector<std::vector<int>>' and you'll get 'operator =' for free
     int  **array;
+    // AL: use valuable names for the members, I don't get what 'g' and 'h' mean
     int             g, h, x, y, gridsize;
     heuristics      heuristic;
     std::shared_ptr<struct node>    prev;

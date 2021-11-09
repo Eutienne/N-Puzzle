@@ -12,6 +12,7 @@
 
 #include "npuzzle.hpp"
 
+// AL: _mGridsize is not initialized here
 npuzzle::npuzzle()
 {
 }
@@ -20,6 +21,7 @@ npuzzle::~npuzzle()
 {
 }
 
+// AL: pass parameter as 'consnt std::string&' as you don't neet to change it here
 void    npuzzle::setHmethod(std::string s)
 {
     if (s == "-m")

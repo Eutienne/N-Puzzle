@@ -30,10 +30,12 @@ enum moves {
 
 struct  F
 {
+    // AL: function can be const
     bool    operator()(std::shared_ptr<node>& a, std::shared_ptr<node>& b);
 };
 
 struct  Puzzle{
+    // AL: function can be const
     bool operator()(const std::shared_ptr<node>& a, const std::shared_ptr<node>& b);
 };
 
@@ -46,19 +48,26 @@ public:
 
     std::shared_ptr<node> copyNode(std::shared_ptr<node> const & n);
     
+    // AL: function can be const
     void    print(node const & n);
     void    manhattan(std::shared_ptr<node> & n);
     void    euclidean(std::shared_ptr<node> & n);
+    // AL: function can be const
     void    hamming(std::shared_ptr<node> & n);
+    // AL: function can be const
     void    move_up(node & n);
+    // AL: function can be const
     void    move_down(node & n);
+    // AL: function can be const
     void    move_left(node & n);
+    // AL: function can be const
     void    move_right(node & n);
     void    movements(std::shared_ptr<node> const & n, moves m);
     void    puzzle();
 
 
     void    setOpen(std::shared_ptr<node> const & n);
+    // AL: function can be const
     void    setH(std::shared_ptr<node> & n);
     void    setGoal();
     void    setmGoal();

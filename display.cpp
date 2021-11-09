@@ -10,8 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+// AL: it seems this class is not used at all, delete it then
 #include "display.hpp"
 
+// AL: init _mScreen and _mGridsize here as well, all the members should be initialized in the constructor
 display::display()
 {
     _mGameover = false;
@@ -22,11 +24,13 @@ display::~display(){
 	endwin();
 }
 
+// AL: is this function used?
 bool    display::getGameover()
 {
     return (_mGameover);
 }
 
+// AL: is this function used?
 void    display::setGameover(bool b)
 {
     _mGameover = b;

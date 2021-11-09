@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<results version="2">
+    <cppcheck version="1.90"/>
+    <errors>
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;display::_mScreen&apos; is not initialized in the constructor." verbose="Member variable &apos;display::_mScreen&apos; is not initialized in the constructor." cwe="398">
+            <location file="display.cpp" line="15" column="10"/>
+            <symbol>display::_mScreen</symbol>
+        </error>
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;display::_mGridsize&apos; is not initialized in the constructor." verbose="Member variable &apos;display::_mGridsize&apos; is not initialized in the constructor." cwe="398">
+            <location file="display.cpp" line="15" column="10"/>
+            <symbol>display::_mGridsize</symbol>
+        </error>
+        <error id="operatorEq" severity="style" msg="&apos;node::operator=&apos; should return &apos;node &amp;&apos;." verbose="The node::operator= does not conform to standard C/C++ behaviour. To conform to standard C/C++ behaviour, return a reference to self (such as: &apos;node &amp;node::operator=(..) { .. return *this; }&apos;. For safety reasons it might be better to not fix this message. If you think that safety is always more important than conformance then please ignore/suppress this message. For more details about this topic, see the book &quot;Effective C++&quot; by Scott Meyers." cwe="398">
+            <location file0="display.cpp" file="node.hpp" line="26" column="0"/>
+            <symbol>node</symbol>
+        </error>
+        <error id="functionStatic" severity="performance" msg="Technically the member function &apos;display::pallet&apos; can be static (but you may consider moving to unnamed namespace)." verbose="The member function &apos;display::pallet&apos; can be made a static function. Making a function static can bring a performance benefit since no &apos;this&apos; instance is passed to the function. This change should not cause compiler errors but it does not necessarily make sense conceptually. Think about your design and the task of the function first - is it a function that must not access members of class instances? And maybe it is more appropriate to move this function to a unnamed namespace." cwe="398" inconclusive="true">
+            <location file0="display.cpp" file="display.hpp" line="40" column="17"/>
+            <location file="display.cpp" line="55" column="18"/>
+            <symbol>display::pallet</symbol>
+        </error>
+        <error id="functionConst" severity="style" msg="Technically the member function &apos;display::getGameover&apos; can be const." verbose="The member function &apos;display::getGameover&apos; can be made a const function. Making this function &apos;const&apos; should not cause compiler errors. Even though the function can be made const function technically it may not make sense conceptually. Think about your design and the task of the function first - is it a function that must not change object internal state?" cwe="398" inconclusive="true">
+            <location file0="display.cpp" file="display.hpp" line="41" column="17"/>
+            <location file="display.cpp" line="25" column="18"/>
+            <symbol>display::getGameover</symbol>
+        </error>
+        <error id="operatorEq" severity="style" msg="&apos;node::operator=&apos; should return &apos;node &amp;&apos;." verbose="The node::operator= does not conform to standard C/C++ behaviour. To conform to standard C/C++ behaviour, return a reference to self (such as: &apos;node &amp;node::operator=(..) { .. return *this; }&apos;. For safety reasons it might be better to not fix this message. If you think that safety is always more important than conformance then please ignore/suppress this message. For more details about this topic, see the book &quot;Effective C++&quot; by Scott Meyers." cwe="398">
+            <location file0="main.cpp" file="node.hpp" line="26" column="0"/>
+            <symbol>node</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;nsolver&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;nsolver&apos; has a constructor with 1 argument that is not explicit. Such constructors should in general be explicit for type safety reasons. Using the explicit keyword in the constructor means some mistakes when using the class can be avoided." cwe="398">
+            <location file0="main.cpp" file="nsolver.hpp" line="44" column="5"/>
+            <symbol>nsolver</symbol>
+        </error>
+        <error id="operatorEq" severity="style" msg="&apos;node::operator=&apos; should return &apos;node &amp;&apos;." verbose="The node::operator= does not conform to standard C/C++ behaviour. To conform to standard C/C++ behaviour, return a reference to self (such as: &apos;node &amp;node::operator=(..) { .. return *this; }&apos;. For safety reasons it might be better to not fix this message. If you think that safety is always more important than conformance then please ignore/suppress this message. For more details about this topic, see the book &quot;Effective C++&quot; by Scott Meyers." cwe="398">
+            <location file0="node.cpp" file="node.hpp" line="26" column="0"/>
+            <symbol>node</symbol>
+        </error>
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;npuzzle::_mGridsize&apos; is not initialized in the constructor." verbose="Member variable &apos;npuzzle::_mGridsize&apos; is not initialized in the constructor." cwe="398">
+            <location file="npuzzle.cpp" line="15" column="10"/>
+            <symbol>npuzzle::_mGridsize</symbol>
+        </error>
+        <error id="operatorEq" severity="style" msg="&apos;node::operator=&apos; should return &apos;node &amp;&apos;." verbose="The node::operator= does not conform to standard C/C++ behaviour. To conform to standard C/C++ behaviour, return a reference to self (such as: &apos;node &amp;node::operator=(..) { .. return *this; }&apos;. For safety reasons it might be better to not fix this message. If you think that safety is always more important than conformance then please ignore/suppress this message. For more details about this topic, see the book &quot;Effective C++&quot; by Scott Meyers." cwe="398">
+            <location file0="npuzzle.cpp" file="node.hpp" line="26" column="0"/>
+            <symbol>node</symbol>
+        </error>
+        <error id="functionConst" severity="style" msg="Technically the member function &apos;npuzzle::print&apos; can be const." verbose="The member function &apos;npuzzle::print&apos; can be made a const function. Making this function &apos;const&apos; should not cause compiler errors. Even though the function can be made const function technically it may not make sense conceptually. Think about your design and the task of the function first - is it a function that must not change object internal state?" cwe="398" inconclusive="true">
+            <location file0="npuzzle.cpp" file="npuzzle.hpp" line="33" column="17"/>
+            <location file="npuzzle.cpp" line="76" column="18"/>
+            <symbol>npuzzle::print</symbol>
+        </error>
+        <error id="variableScope" severity="style" msg="The scope of the variable &apos;pos&apos; can be reduced." verbose="The scope of the variable &apos;pos&apos; can be reduced. Warning: Be careful when fixing this message, especially when there are inner loops. Here is an example where cppcheck will write that the scope for &apos;i&apos; can be reduced:\012void f(int x)\012{\012    int i = 0;\012    if (x) {\012        // it&apos;s safe to move &apos;int i = 0;&apos; here\012        for (int n = 0; n &lt; 10; ++n) {\012            // it is possible but not safe to move &apos;int i = 0;&apos; here\012            do_something(&amp;i);\012        }\012    }\012}\012When you see this message it is always safe to reduce the variable scope 1 level." cwe="398">
+            <location file="npuzzle.cpp" line="41" column="9"/>
+            <symbol>pos</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;s&apos; should be passed by const reference." verbose="Parameter &apos;s&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398">
+            <location file="npuzzle.cpp" line="23" column="41"/>
+            <symbol>s</symbol>
+        </error>
+        <error id="uninitMemberVarPrivate" severity="warning" msg="Member variable &apos;nsolver::_mGridsize&apos; is not initialized in the constructor." verbose="Member variable &apos;nsolver::_mGridsize&apos; is not initialized in the constructor." cwe="398" inconclusive="true">
+            <location file="nsolver.cpp" line="25" column="10"/>
+            <symbol>nsolver::_mGridsize</symbol>
+        </error>
+        <error id="uninitMemberVarPrivate" severity="warning" msg="Member variable &apos;nsolver::_mmGoal&apos; is not initialized in the constructor." verbose="Member variable &apos;nsolver::_mmGoal&apos; is not initialized in the constructor." cwe="398" inconclusive="true">
+            <location file="nsolver.cpp" line="25" column="10"/>
+            <symbol>nsolver::_mmGoal</symbol>
+        </error>
+        <error id="operatorEq" severity="style" msg="&apos;node::operator=&apos; should return &apos;node &amp;&apos;." verbose="The node::operator= does not conform to standard C/C++ behaviour. To conform to standard C/C++ behaviour, return a reference to self (such as: &apos;node &amp;node::operator=(..) { .. return *this; }&apos;. For safety reasons it might be better to not fix this message. If you think that safety is always more important than conformance then please ignore/suppress this message. For more details about this topic, see the book &quot;Effective C++&quot; by Scott Meyers." cwe="398">
+            <location file0="nsolver.cpp" file="node.hpp" line="26" column="0"/>
+            <symbol>node</symbol>
+        </error>
+        <error id="useInitializationList" severity="performance" msg="Variable &apos;_mFirstNode&apos; is assigned in constructor body. Consider performing initialization in initialization list." verbose="When an object of a class is created, the constructors of all member variables are called consecutively in the order the variables are declared, even if you don&apos;t explicitly write them to the initialization list. You could avoid assigning &apos;_mFirstNode&apos; a value by passing the value to the constructor in the initialization list." cwe="398">
+            <location file="nsolver.cpp" line="34" column="5"/>
+            <symbol>_mFirstNode</symbol>
+        </error>
+        <error id="functionConst" severity="style" msg="Technically the member function &apos;F::operator()&apos; can be const." verbose="The member function &apos;F::operator()&apos; can be made a const function. Making this function &apos;const&apos; should not cause compiler errors. Even though the function can be made const function technically it may not make sense conceptually. Think about your design and the task of the function first - is it a function that must not change object internal state?" cwe="398" inconclusive="true">
+            <location file0="nsolver.cpp" file="nsolver.hpp" line="33" column="13"/>
+            <location file="nsolver.cpp" line="15" column="12"/>
+            <symbol>F::operator()</symbol>
+        </error>
+        <error id="functionConst" severity="style" msg="Technically the member function &apos;Puzzle::operator()&apos; can be const." verbose="The member function &apos;Puzzle::operator()&apos; can be made a const function. Making this function &apos;const&apos; should not cause compiler errors. Even though the function can be made const function technically it may not make sense conceptually. Think about your design and the task of the function first - is it a function that must not change object internal state?" cwe="398" inconclusive="true">
+            <location file0="nsolver.cpp" file="nsolver.hpp" line="37" column="10"/>
+            <location file="nsolver.cpp" line="20" column="14"/>
+            <symbol>Puzzle::operator()</symbol>
+        </error>
+        <error id="functionConst" severity="style" msg="Technically the member function &apos;nsolver::print&apos; can be const." verbose="The member function &apos;nsolver::print&apos; can be made a const function. Making this function &apos;const&apos; should not cause compiler errors. Even though the function can be made const function technically it may not make sense conceptually. Think about your design and the task of the function first - is it a function that must not change object internal state?" cwe="398" inconclusive="true">
+            <location file0="nsolver.cpp" file="nsolver.hpp" line="49" column="13"/>
+            <location file="nsolver.cpp" line="43" column="18"/>
+            <symbol>nsolver::print</symbol>
+        </error>
+        <error id="functionConst" severity="style" msg="Technically the member function &apos;nsolver::hamming&apos; can be const." verbose="The member function &apos;nsolver::hamming&apos; can be made a const function. Making this function &apos;const&apos; should not cause compiler errors. Even though the function can be made const function technically it may not make sense conceptually. Think about your design and the task of the function first - is it a function that must not change object internal state?" cwe="398" inconclusive="true">
+            <location file0="nsolver.cpp" file="nsolver.hpp" line="52" column="13"/>
+            <location file="nsolver.cpp" line="149" column="18"/>
+            <symbol>nsolver::hamming</symbol>
+        </error>
+        <error id="functionStatic" severity="performance" msg="Technically the member function &apos;nsolver::move_up&apos; can be static (but you may consider moving to unnamed namespace)." verbose="The member function &apos;nsolver::move_up&apos; can be made a static function. Making a function static can bring a performance benefit since no &apos;this&apos; instance is passed to the function. This change should not cause compiler errors but it does not necessarily make sense conceptually. Think about your design and the task of the function first - is it a function that must not access members of class instances? And maybe it is more appropriate to move this function to a unnamed namespace." cwe="398" inconclusive="true">
+            <location file0="nsolver.cpp" file="nsolver.hpp" line="53" column="13"/>
+            <location file="nsolver.cpp" line="185" column="18"/>
+            <symbol>nsolver::move_up</symbol>
+        </error>
+        <error id="functionConst" severity="style" msg="Technically the member function &apos;nsolver::move_down&apos; can be const." verbose="The member function &apos;nsolver::move_down&apos; can be made a const function. Making this function &apos;const&apos; should not cause compiler errors. Even though the function can be made const function technically it may not make sense conceptually. Think about your design and the task of the function first - is it a function that must not change object internal state?" cwe="398" inconclusive="true">
+            <location file0="nsolver.cpp" file="nsolver.hpp" line="54" column="13"/>
+            <location file="nsolver.cpp" line="194" column="18"/>
+            <symbol>nsolver::move_down</symbol>
+        </error>
+        <error id="functionStatic" severity="performance" msg="Technically the member function &apos;nsolver::move_left&apos; can be static (but you may consider moving to unnamed namespace)." verbose="The member function &apos;nsolver::move_left&apos; can be made a static function. Making a function static can bring a performance benefit since no &apos;this&apos; instance is passed to the function. This change should not cause compiler errors but it does not necessarily make sense conceptually. Think about your design and the task of the function first - is it a function that must not access members of class instances? And maybe it is more appropriate to move this function to a unnamed namespace." cwe="398" inconclusive="true">
+            <location file0="nsolver.cpp" file="nsolver.hpp" line="55" column="13"/>
+            <location file="nsolver.cpp" line="203" column="18"/>
+            <symbol>nsolver::move_left</symbol>
+        </error>
+        <error id="functionConst" severity="style" msg="Technically the member function &apos;nsolver::move_right&apos; can be const." verbose="The member function &apos;nsolver::move_right&apos; can be made a const function. Making this function &apos;const&apos; should not cause compiler errors. Even though the function can be made const function technically it may not make sense conceptually. Think about your design and the task of the function first - is it a function that must not change object internal state?" cwe="398" inconclusive="true">
+            <location file0="nsolver.cpp" file="nsolver.hpp" line="56" column="13"/>
+            <location file="nsolver.cpp" line="212" column="18"/>
+            <symbol>nsolver::move_right</symbol>
+        </error>
+        <error id="functionConst" severity="style" msg="Technically the member function &apos;nsolver::setH&apos; can be const." verbose="The member function &apos;nsolver::setH&apos; can be made a const function. Making this function &apos;const&apos; should not cause compiler errors. Even though the function can be made const function technically it may not make sense conceptually. Think about your design and the task of the function first - is it a function that must not change object internal state?" cwe="398" inconclusive="true">
+            <location file0="nsolver.cpp" file="nsolver.hpp" line="62" column="13"/>
+            <location file="nsolver.cpp" line="160" column="18"/>
+            <symbol>nsolver::setH</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;nsolver&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;nsolver&apos; has a constructor with 1 argument that is not explicit. Such constructors should in general be explicit for type safety reasons. Using the explicit keyword in the constructor means some mistakes when using the class can be avoided." cwe="398">
+            <location file0="nsolver.cpp" file="nsolver.hpp" line="44" column="5"/>
+            <symbol>nsolver</symbol>
+        </error>
+        <error id="oppositeInnerCondition" severity="warning" msg="Opposite inner &apos;if&apos; condition leads to a dead code block." verbose="Opposite inner &apos;if&apos; condition leads to a dead code block (outer condition is &apos;n-&gt;h!=0&apos; and inner condition is &apos;n-&gt;h==0&apos;)." cwe="398">
+            <location file="nsolver.cpp" line="246" column="18" info="opposite inner condition: n-&gt;h==0"/>
+            <location file="nsolver.cpp" line="243" column="16" info="outer condition: n-&gt;h!=0"/>
+        </error>
+        <error id="selfAssignment" severity="warning" msg="Redundant assignment of &apos;h&apos; to itself." verbose="Redundant assignment of &apos;h&apos; to itself." cwe="398">
+            <location file="nsolver.cpp" line="155" column="61"/>
+            <symbol>h</symbol>
+        </error>
+        <error id="constParameter" severity="style" msg="Parameter &apos;a&apos; can be declared with const" verbose="Parameter &apos;a&apos; can be declared with const" cwe="398">
+            <location file="nsolver.cpp" line="15" column="46"/>
+        </error>
+        <error id="constParameter" severity="style" msg="Parameter &apos;b&apos; can be declared with const" verbose="Parameter &apos;b&apos; can be declared with const" cwe="398">
+            <location file="nsolver.cpp" line="15" column="72"/>
+        </error>
+        <error id="constParameter" severity="style" msg="Parameter &apos;n&apos; can be declared with const" verbose="Parameter &apos;n&apos; can be declared with const" cwe="398">
+            <location file="nsolver.cpp" line="149" column="50"/>
+        </error>
+        <error id="constParameter" severity="style" msg="Parameter &apos;n&apos; can be declared with const" verbose="Parameter &apos;n&apos; can be declared with const" cwe="398">
+            <location file="nsolver.cpp" line="160" column="47"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &apos;draw&apos; is never used." verbose="The function &apos;draw&apos; is never used." cwe="561">
+            <location file="display.cpp" line="64" column="0"/>
+            <symbol>draw</symbol>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &apos;getFirstNode&apos; is never used." verbose="The function &apos;getFirstNode&apos; is never used." cwe="561">
+            <location file="nsolver.cpp" line="63" column="0"/>
+            <symbol>getFirstNode</symbol>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &apos;getGameover&apos; is never used." verbose="The function &apos;getGameover&apos; is never used." cwe="561">
+            <location file="display.cpp" line="25" column="0"/>
+            <symbol>getGameover</symbol>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &apos;getGoal&apos; is never used." verbose="The function &apos;getGoal&apos; is never used." cwe="561">
+            <location file="nsolver.cpp" line="53" column="0"/>
+            <symbol>getGoal</symbol>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &apos;pallet&apos; is never used." verbose="The function &apos;pallet&apos; is never used." cwe="561">
+            <location file="display.cpp" line="55" column="0"/>
+            <symbol>pallet</symbol>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &apos;setGameover&apos; is never used." verbose="The function &apos;setGameover&apos; is never used." cwe="561">
+            <location file="display.cpp" line="30" column="0"/>
+            <symbol>setGameover</symbol>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &apos;setup&apos; is never used." verbose="The function &apos;setup&apos; is never used." cwe="561">
+            <location file="display.cpp" line="35" column="0"/>
+            <symbol>setup</symbol>
+        </error>
+        <error id="missingIncludeSystem" severity="information" msg="Cppcheck cannot find all the include files (use --check-config for details)" verbose="Cppcheck cannot find all the include files. Cppcheck can check the code without the include files found. But the results will probably be more accurate if all the include files are found. Please check your project&apos;s include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config."/>
+    </errors>
+</results>
