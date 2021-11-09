@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/23 20:47:13 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/08 21:58:17 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/09 17:44:12 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int main(int argc, char **argv)
         exit(1);
     }
     nsolver         S(P.getNode());
-    S.setmGoal();
     S.puzzle();
     
 

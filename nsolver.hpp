@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:51:58 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/08 22:32:19 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/09 17:45:00 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <iostream>
 # include <iomanip>
 # include <math.h>
-# include <unordered_map>
 
 enum moves {
   UP = 0,

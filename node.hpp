@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:51:10 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/05 17:18:12 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/09 16:28:35 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,19 @@
 # include <memory>
 # include <sstream>
 
+enum heuristics {
+  MANHATTAN = 0,
+  EUCLIDEAN, 
+  HAMMING
+};
+
 struct   node{
 
     node const &   operator=(node & n);
 
     int  **array;
     int             g, h, x, y, gridsize;
-    std::string     s;
+    heuristics      heuristic;
     std::shared_ptr<struct node>    prev;
 };
 

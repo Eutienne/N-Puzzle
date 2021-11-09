@@ -23,11 +23,11 @@ npuzzle::~npuzzle()
 void    npuzzle::setHmethod(std::string s)
 {
     if (s == "-m")
-        _mNode->s = "MANHATTAN";
+        _mNode->heuristic = MANHATTAN;
     else if (s == "-e")
-        _mNode->s = "EUCLIDEAN";
+        _mNode->heuristic = EUCLIDEAN;
     else if (s == "-h")
-        _mNode->s = "HAMMING";
+        _mNode->heuristic = HAMMING;
     else
     {
         std::cout << "Wrong argument" << std::endl;

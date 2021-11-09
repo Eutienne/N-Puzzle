@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/08 22:45:58 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/09 20:35:08 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,15 @@ nsolver::nsolver()
 nsolver::nsolver(node const & n)
     : _mGridsize(n.gridsize)
 {
-    _mGoal = make_node(_mGridsize);
-    this->setGoal();
+    // _mGoal = make_node(_mGridsize);
+    // this->setGoal();
     _mFirstNode = std::make_shared<node>(n);
-
+    setmGoal();
 }
 
 nsolver::~nsolver()
 {
+    delete[] _mmGoal;
 }
 
 void    nsolver::print(node const & n)
@@ -63,33 +64,6 @@ const node & nsolver::getFirstNode() const{
     return(*_mFirstNode);
 }
 
-void    nsolver::setGoal()
-{
-    for (int i = 0; i < _mGridsize; i++)
-    {
-        for (int j = 0; j < _mGridsize; j++)
-            _mGoal->array[i][j] = 0;
-    }
-    for (int i = 0, j = 0, n = 1; _mGoal->array[i] && _mGoal->array[i][j] == 0 && n < _mGridsize * _mGridsize;)
-    {
-        for (; j < _mGridsize && _mGoal->array[i][j] == 0; j++, n++)
-            _mGoal->array[i][j] = n; 
-        j--; i++;
-        for (; i < _mGridsize && _mGoal->array[i][j] == 0; i++, n++)
-            _mGoal->array[i][j] = n;
-        i--; j--;
-        for (; j > -1 && _mGoal->array[i][j] == 0; j--, n++)
-            _mGoal->array[i][j] = n;
-        j++; i--;
-        for (; i > -1 && _mGoal->array[i][j] == 0; i--, n++)
-            _mGoal->array[i][j] = n;
-        i++; j++;
-    }
-    _mGoal->y = _mGridsize/2;
-    _mGridsize % 2 == 0 ? _mGoal->array[_mGridsize / 2][(_mGridsize / 2) -1] = 0 : _mGoal->array[_mGridsize / 2][(_mGridsize / 2)] = 0;
-    _mGridsize % 2 == 0 ? _mGoal->x = (_mGridsize / 2) -1 : _mGoal->x = _mGridsize / 2;
-}
-
 void    nsolver::setmGoal()
 {
     std::pair<int, int> *grid = new std::pair<int, int>[_mGridsize*_mGridsize];
@@ -110,8 +84,6 @@ void    nsolver::setmGoal()
         x++; y++;
     }
     _mmGoal = grid ;
-    for (int i = 0; i < _mGridsize * _mGridsize; i++)
-        std::cout << i << ": " << _mmGoal[i].first << "-" << _mmGoal[i].second << std::endl;
 }
 
 void    nsolver::setOpen(std::shared_ptr<node> const & n)
@@ -119,71 +91,61 @@ void    nsolver::setOpen(std::shared_ptr<node> const & n)
     _mOpen.push(n);
 }
 
-// void    nsolver::manhattan(std::shared_ptr<node> & n)
-// {
-//     int h = 0;
-//     for (int i=0; i < _mGridsize; i++)
-//     {
-//         for (int j = 0; j < _mGridsize; j++)
-//         {
-//             for (int y=0; j < _mGridsize && y < _mGridsize && n->array[i][j] != 0; y++)
-//             {
-//                 for (int x=0; x < _mGridsize; x++)
-//                 {
-//                     if (n->array[i][j] == _mGoal->array[y][x])
-//                     {
-//                         y > i ? h += y - i : h += i - y;
-//                         x > j ? h += x - j : h += j - x;
-//                         break;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-//     n->h = h;  
-// }
-
 void    nsolver::manhattan(std::shared_ptr<node> & n)
 {
-    int h = 0;
-    for (int y=0; y < _mGridsize; y++)
+    int h = n->prev? n->h : 0;
+    if (!n->prev)
     {
-        for (int x = 0; x < _mGridsize; x++)
+        for (int y=0; y < _mGridsize; y++)
         {
-            if (n->array[y][x] != 0)
+            for (int x = 0; x < _mGridsize; x++)
             {
-                y > _mmGoal[n->array[y][x]].first ? h += y - _mmGoal[n->array[y][x]].first : h += _mmGoal[n->array[y][x]].first - y;
-                x > _mmGoal[n->array[y][x]].second ? h += x - _mmGoal[n->array[y][x]].second : h += _mmGoal[n->array[y][x]].second - x;
-            }
-        }
-    }
-    n->h = h;  
-}
-
-void    nsolver::euclidean(std::shared_ptr<node> & n)
-{
-    int h = 0;
-    for (int i=0; i < _mGridsize; i++)
-    {
-        for (int j = 0; j < _mGridsize; j++)
-        {
-            for (int y=0; j < _mGridsize && y < _mGridsize && n->array[i][j] != 0; y++)
-            {
-                for (int x=0, tmp1 =0, tmp2 = 0; x < _mGridsize; x++)
+                if (n->array[y][x] != 0)
                 {
-                    if (n->array[i][j] == _mGoal->array[y][x])
-                    {
-                        y > i ? tmp1 = y - i : tmp1 = i - y;
-                        x > j ? tmp2 = x - j : tmp2 = j - x;
-                        h += sqrt((tmp1 * tmp1) + (tmp2 * tmp2));
-                        break;
-                    }
+                    h += abs(y - _mmGoal[n->array[y][x]].first);
+                    h += abs(x - _mmGoal[n->array[y][x]].second);
                 }
             }
         }
     }
+    else 
+    {
+        int tmp, tmp2;
+        if (n->prev->x == n->x)
+        {
+            tmp = abs(n->y - _mmGoal[n->prev->array[n->y][n->x]].first);
+            tmp2 = abs(n->prev->y - _mmGoal[n->prev->array[n->y][n->x]].first);
+        }
+        else
+        {
+            tmp = abs(n->x - _mmGoal[n->prev->array[n->y][n->x]].second);
+            tmp2 = abs(n->prev->x - _mmGoal[n->prev->array[n->y][n->x]].second);
+        }
+        if (tmp != tmp2)
+            tmp < tmp2 ? h++ : h--;
+    }
+    n->h = h;
+}
+
+void    nsolver::euclidean(std::shared_ptr<node> & n)
+{
+    float h = 0;
+    for (int y=0; y < _mGridsize; y++)
+    {
+        for (int x=0, tmp1 =0, tmp2 = 0; x < _mGridsize; x++)
+        {
+            if (n->array[y][x] != 0)
+            {
+                tmp1 = abs(_mmGoal[n->array[y][x]].first - y);
+                tmp2 = abs(_mmGoal[n->array[y][x]].second - x);
+                h += sqrt((tmp1 * tmp1) + (tmp2 * tmp2));
+            }        
+        }
+    }
     n->h = h;  
 }
+
+
 void    nsolver::hamming(std::shared_ptr<node> & n)
 {
     int h = 0;
@@ -197,18 +159,8 @@ void    nsolver::hamming(std::shared_ptr<node> & n)
 
 void    nsolver::setH(std::shared_ptr<node> & n)
 {
-    std::string moves[2] = {"EUCLIDEAN", "HAMMING"};
-    void    (nsolver::*p2f[])(std::shared_ptr<node> & n) = {&nsolver::euclidean, &nsolver::hamming};
-
-    for (int i = 0; i < 2; i++)
-    {
-        if (moves[i] == n->s)
-        {
-            (this->*p2f[i])(n);
-            return ;
-        }
-    }
-    manhattan(n);
+    void    (nsolver::*p2f[])(std::shared_ptr<node> & n) = {&nsolver::manhattan, &nsolver::euclidean, &nsolver::hamming};
+    (this->*p2f[n->heuristic])(n);
 }
 
 std::shared_ptr<node>  nsolver::copyNode(std::shared_ptr<node> const & n){
@@ -219,6 +171,7 @@ std::shared_ptr<node>  nsolver::copyNode(std::shared_ptr<node> const & n){
     copy->h = tmp.h;
     copy->x = tmp.x;
     copy->y = tmp.y;
+    copy->heuristic = tmp.heuristic;
     copy->prev = n;
 
     for (int y = 0; y < _mGridsize; y++)
