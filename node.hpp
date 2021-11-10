@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:51:10 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/09 16:28:35 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/10 19:05:03 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define NODE_HPP
 # include <memory>
 # include <sstream>
+# include <vector>
 
 enum heuristics {
   MANHATTAN = 0,
@@ -23,10 +24,11 @@ enum heuristics {
 
 struct   node{
 
-    node const &   operator=(node & n);
+    node &   operator=(node & n);
+    bool     operator<(const node & a) const;
 
-    int  **array;
-    int             g, h, x, y, gridsize;
+    std::vector<std::vector<int> >  array;
+    int             gen, distance, x, y, gridsize;
     heuristics      heuristic;
     std::shared_ptr<struct node>    prev;
 };

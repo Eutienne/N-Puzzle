@@ -13,6 +13,7 @@
 #include "npuzzle.hpp"
 
 npuzzle::npuzzle()
+    : _mGridsize(0)
 {
 }
 
@@ -20,7 +21,7 @@ npuzzle::~npuzzle()
 {
 }
 
-void    npuzzle::setHmethod(std::string s)
+void    npuzzle::setHmethod(const std::string s)
 {
     if (s == "-m")
         _mNode->heuristic = MANHATTAN;
@@ -50,7 +51,8 @@ void    npuzzle::setNode(std::ifstream & file)
         {
             _mGridsize = atoi(line.c_str());
             _mNode = make_node(_mGridsize);
-            _mNode->g = 0;
+            _mNode->gen = 0;
+            _mNode->heuristic = MANHATTAN;
             _mNode->gridsize = _mGridsize;
         }
         else if (!line.empty())
