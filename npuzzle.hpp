@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/26 18:24:35 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/10 11:45:14 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/11 11:40:23 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ class   npuzzle{
 
     private:
         int                                                 _mGridsize;
-        std::shared_ptr<node>                               _mNode;
+        node                                                _mNode;
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/23 20:47:13 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/09 17:44:12 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/12 21:23:30 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int main(int argc, char **argv)
         std::cout << "wrong arguments" << std::endl;
         exit(-1);
     }
-    argc == 3? i = 2: i = 1;
+    argc == 3 ? i = 2 : i = 1;
     std::ifstream   file(argv[i]);
     if (file.is_open())
     {
@@ -37,6 +37,7 @@ int main(int argc, char **argv)
         std::cout << "can't read last argument" << std::endl;
         exit(1);
     }
+    P.print(P.getNode());
     nsolver         S(P.getNode());
     S.puzzle();
     

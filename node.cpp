@@ -6,35 +6,40 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:57:46 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/10 19:08:35 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/12 21:51:01 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "node.hpp"
 #include <iostream>
 
-std::shared_ptr<node>  make_node(int grid)
+node make_node(int grid)
 {
-    std::shared_ptr<node> n = std::make_shared<node>();
-    n->array.resize(grid, std::vector<int>(grid,0));
+    node n;
+    n.array.resize(grid, std::vector<int>(grid,0));
+    n.prev = nullptr;
     return (n);
+}
+
+node::~node()
+{
 }
 
 bool     node::operator<(const node & a) const
 {
-    std::cout << " A" << std::endl;
     return (this->distance < a.distance);
 }
 
-
-node &   node::operator=(node & n)
+node &   node::operator=(const node & n)
 {
     this->gen = n.gen;
     this->distance = n.distance;
     this->x = n.x;
     this->gridsize = n.gridsize;
     this->y = n.y;
+    this->heuristic = n.heuristic;
     this->array = n.array;
+    std::cout << this->prev << " AADF" << std::endl;
 
     return *this;
 }

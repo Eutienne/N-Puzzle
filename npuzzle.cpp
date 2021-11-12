@@ -24,11 +24,11 @@ npuzzle::~npuzzle()
 void    npuzzle::setHmethod(const std::string s)
 {
     if (s == "-m")
-        _mNode->heuristic = MANHATTAN;
+        _mNode.heuristic = MANHATTAN;
     else if (s == "-e")
-        _mNode->heuristic = EUCLIDEAN;
+        _mNode.heuristic = EUCLIDEAN;
     else if (s == "-h")
-        _mNode->heuristic = HAMMING;
+        _mNode.heuristic = HAMMING;
     else
     {
         std::cout << "Wrong argument" << std::endl;
@@ -51,19 +51,19 @@ void    npuzzle::setNode(std::ifstream & file)
         {
             _mGridsize = atoi(line.c_str());
             _mNode = make_node(_mGridsize);
-            _mNode->gen = 0;
-            _mNode->heuristic = MANHATTAN;
-            _mNode->gridsize = _mGridsize;
+            _mNode.gen = 0;
+            _mNode.heuristic = MANHATTAN;
+            _mNode.gridsize = _mGridsize;
         }
         else if (!line.empty())
         {
             std::stringstream stream(line);
-            for (int i = 0; stream >>_mNode->array[j][i]; i++)
+            for (int i = 0; stream >>_mNode.array[j][i]; i++)
             {
-                if (_mNode->array[j][i] == 0)
+                if (_mNode.array[j][i] == 0)
                 {
-                    _mNode->y = j;
-                    _mNode->x = i;
+                    _mNode.y = j;
+                    _mNode.x = i;
                 }
             }
             j++; 
@@ -72,7 +72,7 @@ void    npuzzle::setNode(std::ifstream & file)
 }
 
 const node & npuzzle::getNode() const{
-    return(*_mNode);
+    return(_mNode);
 }
 
 void    npuzzle::print(node const & n)

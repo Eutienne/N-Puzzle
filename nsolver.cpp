@@ -6,27 +6,17 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/10 19:00:24 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/12 21:51:18 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nsolver.hpp"
 
-// bool    F::operator()(const std::shared_ptr<node>& a, const std::shared_ptr<node>& b) const
-// {
-//         return (a->distance + a->gen  > b->distance + b->gen);
-// }
-
-bool Puzzle::operator()(const std::shared_ptr<node>& a, const std::shared_ptr<node>& b) const
-{
-        return (a->array != b->array);
-}
-
 nsolver::nsolver() = default;
 
 
 nsolver::nsolver(node const & n)
-    : _mGridsize(n.gridsize), _mFirstNode(std::make_shared<node>(n))
+    : _mGridsize(n.gridsize), _mFirstNode(n)
 {
     setGoal();
 }
@@ -51,13 +41,13 @@ void    nsolver::print(node const & n) const
 //     return (*_mGoal);
 // }
 
-const std::shared_ptr<node> &  nsolver::getOpen() const
+const node &  nsolver::getOpen() const
 {
     return (_mOpen.top());
 }
 
 const node & nsolver::getFirstNode() const{
-    return(*_mFirstNode);
+    return(_mFirstNode);
 }
 
 void    nsolver::setGoal()
@@ -82,7 +72,7 @@ void    nsolver::setGoal()
     _mGoal = grid ;
 }
 
-void    nsolver::setOpen(std::shared_ptr<node> const & n)
+void    nsolver::setOpen(node const & n)
 {
     _mOpen.push(n);
 }
@@ -153,23 +143,23 @@ void    nsolver::hamming(node & n) const
 
 }
 
-void    nsolver::setH(std::shared_ptr<node> & n) const
+void    nsolver::setH(node & n) const
 {
-    void    (nsolver::*p2f[])(node & n)const = {&nsolver::manhattan, &nsolver::euclidean, &nsolver::hamming};
-    (this->*p2f[n->heuristic])(*n);
+     void    (nsolver::*p2f[])(node & n)const = {&nsolver::manhattan, &nsolver::euclidean, &nsolver::hamming};
+    (this->*p2f[n.heuristic])(n);
 }
 
-std::shared_ptr<node>  nsolver::copyNode(std::shared_ptr<node> const & n){
-    std::shared_ptr<node> copy = make_node(_mGridsize);
+node  nsolver::copyNode(const node & n){
+    node copy = make_node(_mGridsize);
 
-    node tmp = *n;
-    copy->gen = tmp.gen;
-    copy->distance = tmp.distance;
-    copy->x = tmp.x;
-    copy->y = tmp.y;
-    copy->heuristic = tmp.heuristic;
-    copy->prev = n;
-    copy->array = tmp.array;
+    node tmp = n;
+    copy.gen = tmp.gen;
+    copy.distance = tmp.distance;
+    copy.x = tmp.x;
+    copy.y = tmp.y;
+    copy.heuristic = tmp.heuristic;
+    copy.prev = const_cast<node*>(&n);
+    copy.array = tmp.array;
 
     return copy;
 }
@@ -210,44 +200,55 @@ void    nsolver::move_right(node & n) const
     }
 }
 
-void nsolver::movements(std::shared_ptr<node> const & n, moves m)
+void nsolver::movements(const node & n, moves m)
 {
     void    (nsolver::*p2f[])(node &n)const = {&nsolver::move_up, &nsolver::move_down, &nsolver::move_left, &nsolver::move_right};
 
-    std::shared_ptr<node>    tmp = copyNode(n);
+    node    tmp = copyNode(n);
 
-    tmp->gen++;
-    (this->*p2f[m])(*tmp);
+    tmp.gen++;
+    tmp.prev = const_cast<node*>(&n);
+    (this->*p2f[m])(tmp);
     setH(tmp);
-    if (_mClosed.find(tmp) == _mClosed.end()) {
+    auto it = _mClosed.find(tmp.array);
+    if (it != _mClosed.end()) {
         setOpen(tmp);
-        _mClosed.insert(tmp);
+         _mClosed.insert(std::make_pair(tmp.array, tmp.gen));
     }
+
+    // if (_mClosed.at(tmp->array)) {
+    //     setOpen(*tmp);
+    //     _mClosed.insert(std::make_pair(tmp->array, tmp->gen));
+    // }
+    // if (tmp->array != tmp->prev->array)
+    //     setOpen(*tmp);
 }
 
 void nsolver::puzzle()
 {
-    std::shared_ptr<node>    n;
+    node    n;
 
     n = _mFirstNode;
+    n.prev = NULL;
     setH(n);
     setOpen(n);
-    for (;n->distance != 0; n = getOpen())
+    for (;n.distance != 0; n = getOpen())
     {
         _mOpen.pop();
-        if ((!(n->prev)) || (n->x < _mGridsize -1 && n->prev->x != n->x +1))
+        if ((!(n.prev)) || (n.x < _mGridsize -1 && n.prev->x != n.x +1))
             movements(n, RIGHT);
-        if ((!(n->prev)) || (n->y > 0 && n->prev->y != n->y -1))
+        if ((!(n.prev)) || (n.y > 0 && n.prev->y != n.y -1))
             movements(n, UP);
-        if ((!(n->prev)) || (n->y < _mGridsize -1 && n->prev->y != n->y +1))
+        if ((!(n.prev)) || (n.y < _mGridsize -1 && n.prev->y != n.y +1))
             movements(n, DOWN);
-        if ((!(n->prev)) || (n->x > 0 && n->prev->x != n->x -1))
+        if ((!(n.prev)) || (n.x > 0 && n.prev->x != n.x -1))
             movements(n, LEFT);
-        _mClosed.insert(n);
+        _mClosed.insert(std::make_pair(n.array, n.gen));
+        // _mClosed.insert(n);
     }
-    for (; n; n = n->prev)
-    {
-        std::cout << "________________\n";
-        print(*n);
-    }
+    // for (; n.prev; n = *n.prev)
+    // {
+    //     std::cout << "________________\n";
+    //     print(n);
+    // }
 }
