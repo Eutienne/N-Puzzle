@@ -6,19 +6,24 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:57:46 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/12 21:51:01 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/15 22:07:37 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "node.hpp"
 #include <iostream>
 
-node make_node(int grid)
+node * make_node(int grid)
 {
-    node n;
-    n.array.resize(grid, std::vector<int>(grid,0));
-    n.prev = nullptr;
+    node *n = new node();
+    n->array.resize(grid, std::vector<int>(grid,0));
+    n->prev = nullptr;
     return (n);
+}
+
+node::node()
+    : prev(NULL), gen(0), distance(0), x(0), y(0), gridsize(0), heuristic(MANHATTAN)
+{
 }
 
 node::~node()
@@ -39,7 +44,7 @@ node &   node::operator=(const node & n)
     this->y = n.y;
     this->heuristic = n.heuristic;
     this->array = n.array;
-    std::cout << this->prev << " AADF" << std::endl;
+    this->prev = n.prev;
 
     return *this;
 }

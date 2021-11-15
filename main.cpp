@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/23 20:47:13 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/12 21:23:30 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/15 22:30:31 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 int main(int argc, char **argv)
 {
+    {
     npuzzle         P;
     int             i;
 
@@ -37,11 +38,9 @@ int main(int argc, char **argv)
         std::cout << "can't read last argument" << std::endl;
         exit(1);
     }
-    P.print(P.getNode());
     nsolver         S(P.getNode());
     S.puzzle();
-    
-
+    }
     // P.print(*std::make_shared<node>(P.getFirstNode()));
     // P.setNode(P.getFirstNode());
     // for (node n; P.getNodeSize() != 0; n = P.getNode())

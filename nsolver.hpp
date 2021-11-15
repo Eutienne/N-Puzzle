@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:51:58 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/12 20:56:31 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/15 21:49:00 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,23 +43,18 @@ struct hash_X{
   }
 };
 
-// struct  F
-// {
-//     bool    operator()(const std::shared_ptr<node>& a, const std::shared_ptr<node>& b) const;
-// };
-
-// struct  Puzzle{
-//     bool operator()(const std::shared_ptr<node>& a, const std::shared_ptr<node>& b) const;
-// };
-
+struct  F
+{
+    bool    operator()(node * a, node * b) const;
+};
 
 class nsolver
 {
 public:
-    nsolver(node const & n);
+    nsolver(const node & n);
     ~nsolver();
 
-    node copyNode(const node& n);
+    node &  copyNode(const node& n);
     
     void    print(node const & n) const;
     void    manhattan(node & n) const;
@@ -73,11 +68,11 @@ public:
     void    puzzle();
 
 
-    void    setOpen(node const & n);
+    void    setOpen(node * n);
     void    setH(node & n) const;
     void    setGoal();
     
-    const node &   getOpen() const;
+    node &    getOpen() const;
     // const node &                    getGoal() const;
     const node &                    getFirstNode() const;
 
@@ -85,10 +80,11 @@ public:
 private:
     nsolver();
     int                                                                                     _mGridsize;
-    node                                                                                    _mFirstNode;
+    node*                                                                                   _mFirstNode;
     std::pair<int,int>*                                                                     _mGoal;
-    std::priority_queue<node, std::vector<node>, std::less<node> >                         _mOpen;
-    std::unordered_map<std::vector<std::vector<int> >, int, hash_X>                                 _mClosed;
+    std::queue<node*>                                                                       _mViseted;
+    std::priority_queue<node*, std::vector<node*>, F >                       _mOpen;
+    std::unordered_map<std::vector<std::vector<int> >, int, hash_X>                         _mClosed;
     // std::priority_queue<std::shared_ptr<node>, std::vector<std::shared_ptr<node> >, F>      _mOpen;
 };
 

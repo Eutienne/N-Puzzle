@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:51:10 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/12 20:54:19 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/15 21:07:02 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ enum heuristics {
 
 struct   node{
 
+    node();
     ~node();
     node &   operator=(const node & n);
     bool     operator<(const node & a) const;
@@ -31,11 +32,10 @@ struct   node{
     std::vector<std::vector<int> >  array;
     int             gen, distance, x, y, gridsize;
     heuristics      heuristic;
-    node*           prev;
-    // std::shared_ptr<struct node>    prev;
+    struct node*           prev;
 };
 
-node  make_node(int grid);
+node * make_node(int grid);
 // std::shared_ptr<node>  make_node(int grid);
 
 
