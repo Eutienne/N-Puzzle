@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/23 20:47:13 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/15 22:37:52 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/16 21:39:38 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int main(int argc, char **argv)
     nsolver         S(P.getNode());
     S.puzzle();
     }
+    // while(1);
   // P.print(*std::make_shared<node>(P.getFirstNode()));
     // P.setNode(P.getFirstNode());
     // for (node n; P.getNodeSize() != 0; n = P.getNode())

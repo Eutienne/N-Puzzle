@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/15 22:09:29 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/16 22:10:54 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 
 bool    F::operator()(node * a, node * b) const
 {
-    if (a->distance == b->distance)
+    // if (a->distance == b->distance)
+    if (a->distance + a->gen == b->gen + b->distance)
         return (!(a->gen < b->gen));
-    return (!(a->distance < b->distance));
+    return (!(a->distance + a->gen < b->gen + b->distance));
+    // return (!(a->distance < b->distance));
 }
 
 nsolver::nsolver() = default;
@@ -159,14 +161,16 @@ void    nsolver::setH(node & n) const
 node &  nsolver::copyNode(const node & n){
     node *copy = make_node(_mGridsize);
 
-    copy->gen = n.gen;
-    copy->distance = n.distance;
-    copy->x = n.x;
-    copy->y = n.y;
-    copy->heuristic = n.heuristic;
+    *copy = n;
     copy->prev = const_cast<node*>(&n);
-    copy->array = n.array;
     return *copy;
+
+    // copy->gen = n.gen;
+    // copy->distance = n.distance;
+    // copy->x = n.x;
+    // copy->y = n.y;
+    // copy->heuristic = n.heuristic;
+    // copy->array = n.array;
 }
 
 void    nsolver::move_up(node & n) const
@@ -207,17 +211,23 @@ void    nsolver::move_right(node & n) const
 
 void nsolver::movements(const node & n, moves m)
 {
-    void    (nsolver::*p2f[])(node &n)const = {&nsolver::move_up, &nsolver::move_down, &nsolver::move_left, &nsolver::move_right};
-
+    hash_X X;
     node    &tmp = copyNode(n);
+    void    (nsolver::*p2f[])(node &n)const = {&nsolver::move_up, &nsolver::move_down, &nsolver::move_left, &nsolver::move_right};
+    uint64_t s;
+    
     tmp.gen++;
     (this->*p2f[m])(tmp);
     setH(tmp);
-    auto it = _mClosed.find(tmp.array);
-    if (it == _mClosed.end()) {
+    s = X.operator()(tmp.array);
+    auto it = _mClosed.find(s);
+    if (it == _mClosed.end() || it->second > tmp.gen) {
         setOpen(&tmp);
         _mViseted.push(&tmp);
-         _mClosed.insert(std::make_pair(tmp.array, tmp.gen));
+        if (it == _mClosed.end())
+            _mClosed.insert(std::make_pair(s, tmp.gen));
+        else
+            it->second = tmp.gen;        
     }
     else
         delete &tmp;
@@ -226,12 +236,13 @@ void nsolver::movements(const node & n, moves m)
 void nsolver::puzzle()
 {
     node    *n;
+    hash_X X;
 
     n = _mFirstNode;
     n->prev = NULL;
     setH(*n);
     setOpen(n);
-    _mClosed.insert(std::make_pair(n->array, n->gen));
+    _mClosed.insert(std::make_pair(X.operator()(n->array), n->gen));
     for (;n->distance != 0; n = &getOpen())
     {
         _mOpen.pop();
@@ -244,7 +255,8 @@ void nsolver::puzzle()
         if ((!(n->prev)) || (n->x > 0 && n->prev->x != n->x -1))
             movements(*n, LEFT);
     }
-    for (; n->prev; n = n->prev)
+    std::cout << n->gen << std::endl;
+    for (int i = 0; i < n->gen; n = n->prev)
     {
         std::cout << "________________\n";
         print(*n);

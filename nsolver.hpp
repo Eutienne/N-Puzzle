@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:51:58 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/15 21:49:00 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/16 22:10:25 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <iostream>
 # include <iomanip>
 # include <math.h>
-# include<functional>
+# include <queue>
 
 enum moves {
   UP = 0,
@@ -30,12 +30,14 @@ enum moves {
 };
 
 struct hash_X{
-  size_t operator()(const std::vector<std::vector<int> > &x) const {
-    size_t hash = 3131313131;
+  uint64_t operator()(const std::vector<std::vector<int> > &x) const {
+    // size_t hash = 4;
+    uint64_t hash = 3131313131;
 
     for (auto i : x) {
       for (auto j : i) {
-        hash ^= std::hash<int>()(j);
+         hash ^= j + 0x9e3779b9 + (hash << 6) + (hash >> 2);
+        // hash ^= std::hash<int>()(j);
       }
     }
 
@@ -83,9 +85,8 @@ private:
     node*                                                                                   _mFirstNode;
     std::pair<int,int>*                                                                     _mGoal;
     std::queue<node*>                                                                       _mViseted;
-    std::priority_queue<node*, std::vector<node*>, F >                       _mOpen;
-    std::unordered_map<std::vector<std::vector<int> >, int, hash_X>                         _mClosed;
-    // std::priority_queue<std::shared_ptr<node>, std::vector<std::shared_ptr<node> >, F>      _mOpen;
+    std::priority_queue<node*, std::vector<node*>, F >                                      _mOpen;
+    std::unordered_map<uint64_t, int>                                                       _mClosed;
 };
 
 
