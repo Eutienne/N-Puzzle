@@ -53,7 +53,6 @@ void    npuzzle::setNode(std::ifstream & file)
             _mGridsize = atoi(line.c_str());
             _mNode = make_node(_mGridsize);
             _mNode->gen = 0;
-            // _mNode->prev = nullptr;
             _mNode->heuristic = MANHATTAN;
             _mNode->gridsize = _mGridsize;
         }

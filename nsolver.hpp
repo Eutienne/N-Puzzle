@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:51:58 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/16 22:10:25 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/17 17:02:12 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <iostream>
 # include <iomanip>
 # include <math.h>
-# include <queue>
+# include <deque>
 
 enum moves {
   UP = 0,
@@ -56,7 +56,7 @@ public:
     nsolver(const node & n);
     ~nsolver();
 
-    node &  copyNode(const node& n);
+    std::unique_ptr<node>  copyNode(const node& n);
     
     void    print(node const & n) const;
     void    manhattan(node & n) const;
@@ -84,7 +84,7 @@ private:
     int                                                                                     _mGridsize;
     node*                                                                                   _mFirstNode;
     std::pair<int,int>*                                                                     _mGoal;
-    std::queue<node*>                                                                       _mViseted;
+    std::deque<std::unique_ptr<node> >                                                     _mViseted;
     std::priority_queue<node*, std::vector<node*>, F >                                      _mOpen;
     std::unordered_map<uint64_t, int>                                                       _mClosed;
 };

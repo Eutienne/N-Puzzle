@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/16 22:10:54 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/17 17:42:06 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,19 +158,12 @@ void    nsolver::setH(node & n) const
     (this->*p2f[n.heuristic])(n);
 }
 
-node &  nsolver::copyNode(const node & n){
-    node *copy = make_node(_mGridsize);
+std::unique_ptr<node>  nsolver::copyNode(const node & n){
+    std::unique_ptr<node> copy(make_node(_mGridsize));
 
     *copy = n;
     copy->prev = const_cast<node*>(&n);
-    return *copy;
-
-    // copy->gen = n.gen;
-    // copy->distance = n.distance;
-    // copy->x = n.x;
-    // copy->y = n.y;
-    // copy->heuristic = n.heuristic;
-    // copy->array = n.array;
+    return std::move(copy);
 }
 
 void    nsolver::move_up(node & n) const
@@ -212,25 +205,23 @@ void    nsolver::move_right(node & n) const
 void nsolver::movements(const node & n, moves m)
 {
     hash_X X;
-    node    &tmp = copyNode(n);
+    std::unique_ptr<node>    tmp = copyNode(n);
     void    (nsolver::*p2f[])(node &n)const = {&nsolver::move_up, &nsolver::move_down, &nsolver::move_left, &nsolver::move_right};
     uint64_t s;
     
-    tmp.gen++;
-    (this->*p2f[m])(tmp);
-    setH(tmp);
-    s = X.operator()(tmp.array);
+    tmp->gen++;
+    (this->*p2f[m])(*tmp);
+    setH(*tmp);
+    s = X.operator()(tmp->array);
     auto it = _mClosed.find(s);
-    if (it == _mClosed.end() || it->second > tmp.gen) {
-        setOpen(&tmp);
-        _mViseted.push(&tmp);
+    if (it == _mClosed.end() || it->second > tmp->gen) {
+        setOpen(&(*tmp));
         if (it == _mClosed.end())
-            _mClosed.insert(std::make_pair(s, tmp.gen));
+            _mClosed.insert(std::make_pair(s, tmp->gen));
         else
-            it->second = tmp.gen;        
+            it->second = tmp->gen;        
+        _mViseted.push_back(std::move(tmp));
     }
-    else
-        delete &tmp;
 }
 
 void nsolver::puzzle()

@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:51:10 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/15 21:07:02 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/17 17:02:17 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <memory>
 # include <sstream>
 # include <vector>
+# include <memory>
 
 enum heuristics {
   MANHATTAN = 0,
