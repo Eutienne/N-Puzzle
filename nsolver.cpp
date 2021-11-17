@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/17 17:42:06 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/17 21:04:18 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ bool    F::operator()(node * a, node * b) const
 {
     // if (a->distance == b->distance)
     if (a->distance + a->gen == b->gen + b->distance)
-        return (!(a->gen < b->gen));
+        return (!(a->distance < b->distance));
+        // return (!(a->gen < b->gen));
     return (!(a->distance + a->gen < b->gen + b->distance));
     // return (!(a->distance < b->distance));
 }
