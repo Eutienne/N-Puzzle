@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/17 21:04:18 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/17 22:41:57 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,25 @@ nsolver::~nsolver()
     delete[] _mGoal;
 }
 
+void    nsolver::printS() const
+{
+    for (int i = _mSolution.size() -1; i >= 0; i--)
+        print(*_mSolution[i]);
+    std::cout << "complexity in time: " << _mCtime << std::endl;
+    std::cout << "complexity in size: " << _mCsize << std::endl;
+    std::cout << "number of moves: " << _mCmoves << std::endl;
+}
+
 void    nsolver::print(node const & n) const
 {
-    for (int i = 0; i < _mGridsize; i++)
+    for (int y = 0; y < _mGridsize; y++)
     {
-        for (int j = 0; j < _mGridsize; j++)
-            std::cout << std::left << std::setw(5) << n.array[i][j];
-        std::cout << std::endl;
+        std::cout << " (";
+        for (int x = 0; x < _mGridsize; x++)
+            std::cout << std::left << std::setw(3) << n.array[y][x];
+        std::cout << ")" << std::endl;
     }
+    std::cout << std::endl;
 }
 
 // std::pair<int, int> & nsolver::getGoal() const
@@ -228,15 +239,17 @@ void nsolver::movements(const node & n, moves m)
 void nsolver::puzzle()
 {
     node    *n;
-    hash_X X;
+    hash_X  X;
+    int     i;
 
     n = _mFirstNode;
     n->prev = NULL;
     setH(*n);
     setOpen(n);
     _mClosed.insert(std::make_pair(X.operator()(n->array), n->gen));
-    for (;n->distance != 0; n = &getOpen())
+    for (i = 0;n->distance != 0; n = &getOpen())
     {
+        i++;
         _mOpen.pop();
         if ((!(n->prev)) || (n->x < _mGridsize -1 && n->prev->x != n->x +1))
             movements(*n, RIGHT);
@@ -247,10 +260,9 @@ void nsolver::puzzle()
         if ((!(n->prev)) || (n->x > 0 && n->prev->x != n->x -1))
             movements(*n, LEFT);
     }
-    std::cout << n->gen << std::endl;
+    _mCmoves = n->gen;
+    _mCtime = _mViseted.size();
+    _mCsize = i;
     for (int i = 0; i < n->gen; n = n->prev)
-    {
-        std::cout << "________________\n";
-        print(*n);
-    }
+        _mSolution.push_back(n);
 }

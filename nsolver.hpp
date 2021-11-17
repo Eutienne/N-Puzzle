@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:51:58 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/17 17:02:12 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/17 22:33:26 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ public:
 
     std::unique_ptr<node>  copyNode(const node& n);
     
-    void    print(node const & n) const;
     void    manhattan(node & n) const;
     void    euclidean(node & n) const;
     void    hamming(node & n) const;
@@ -69,24 +68,28 @@ public:
     void    movements(const node & n, moves m);
     void    puzzle();
 
+    void    print(node const & n) const;
+    void    printS() const;
 
     void    setOpen(node * n);
     void    setH(node & n) const;
     void    setGoal();
     
     node &    getOpen() const;
-    // const node &                    getGoal() const;
     const node &                    getFirstNode() const;
+    // const node &                    getGoal() const;
 
 
 private:
     nsolver();
-    int                                                                                     _mGridsize;
+    int                                                                                     _mGridsize, _mCmoves, _mCtime, _mCsize;
     node*                                                                                   _mFirstNode;
     std::pair<int,int>*                                                                     _mGoal;
-    std::deque<std::unique_ptr<node> >                                                     _mViseted;
+    std::deque<std::unique_ptr<node> >                                                      _mViseted;
     std::priority_queue<node*, std::vector<node*>, F >                                      _mOpen;
     std::unordered_map<uint64_t, int>                                                       _mClosed;
+    std::vector<node*>                                                                      _mSolution;
+    
 };
 
 
