@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/17 22:41:57 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/18 22:20:47 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,14 @@ void    nsolver::printS() const
     std::cout << "complexity in time: " << _mCtime << std::endl;
     std::cout << "complexity in size: " << _mCsize << std::endl;
     std::cout << "number of moves: " << _mCmoves << std::endl;
+    // std::cout << "solved in: " << _mTime << "ms" << std::endl;
 }
 
 void    nsolver::print(node const & n) const
 {
     for (int y = 0; y < _mGridsize; y++)
     {
-        std::cout << " (";
+        std::cout << std::left << std::setw(3) << " (";
         for (int x = 0; x < _mGridsize; x++)
             std::cout << std::left << std::setw(3) << n.array[y][x];
         std::cout << ")" << std::endl;
@@ -168,6 +169,18 @@ void    nsolver::setH(node & n) const
 {
      void    (nsolver::*p2f[])(node & n)const = {&nsolver::manhattan, &nsolver::euclidean, &nsolver::hamming};
     (this->*p2f[n.heuristic])(n);
+    // switch (n.heuristic)
+    // {
+    // case 0:
+    //     manhattan(n);
+    //     break;
+    // case 1:
+    //     euclidean(n);
+    //     break;
+    // default:
+    //     hamming(n);
+    //     break;
+    // }
 }
 
 std::unique_ptr<node>  nsolver::copyNode(const node & n){
@@ -178,51 +191,27 @@ std::unique_ptr<node>  nsolver::copyNode(const node & n){
     return std::move(copy);
 }
 
-void    nsolver::move_up(node & n) const
-{
-    if (n.y > 0)
-    {
-        std::swap(n.array[n.y][n.x], n.array[n.y - 1][n.x]);
-        n.y--;
-    }
-}
-
-void    nsolver::move_down(node & n) const
-{
-    if (n.y < _mGridsize -1)
-    {
-        std::swap(n.array[n.y][n.x], n.array[n.y + 1][n.x]);
-        n.y++;
-    }
-}
-
-void    nsolver::move_left(node & n) const
-{
-    if (n.x > 0)
-    {
-        std::swap(n.array[n.y][n.x], n.array[n.y][n.x - 1]);
-        n.x--;
-    }
-}
-
-void    nsolver::move_right(node & n) const
-{
-    if (n.x < _mGridsize -1)
-    {
-        std::swap(n.array[n.y][n.x], n.array[n.y][n.x + 1]);
-        n.x++;
-    }
-}
-
 void nsolver::movements(const node & n, moves m)
 {
     hash_X X;
-    std::unique_ptr<node>    tmp = copyNode(n);
-    void    (nsolver::*p2f[])(node &n)const = {&nsolver::move_up, &nsolver::move_down, &nsolver::move_left, &nsolver::move_right};
     uint64_t s;
+    std::unique_ptr<node>    tmp = copyNode(n);
     
-    tmp->gen++;
-    (this->*p2f[m])(*tmp);
+    switch (m)
+    {
+    case 0:
+        tmp->move_up();
+        break;
+    case 1:
+        tmp->move_down();
+        break;
+    case 2:
+        tmp->move_left();
+        break;
+    default:
+        tmp->move_right();
+        break;
+    }
     setH(*tmp);
     s = X.operator()(tmp->array);
     auto it = _mClosed.find(s);
@@ -251,18 +240,19 @@ void nsolver::puzzle()
     {
         i++;
         _mOpen.pop();
-        if ((!(n->prev)) || (n->x < _mGridsize -1 && n->prev->x != n->x +1))
+        if (((!n->prev) || n->prev->x != n->x +1) && n->x < _mGridsize -1)
             movements(*n, RIGHT);
-        if ((!(n->prev)) || (n->y > 0 && n->prev->y != n->y -1))
+        if (((!n->prev) || n->prev->y != n->y -1) && n->y > 0)
             movements(*n, UP);
-        if ((!(n->prev)) || (n->y < _mGridsize -1 && n->prev->y != n->y +1))
+        if (((!n->prev) ||n->prev->y != n->y +1) && n->y < _mGridsize -1)
             movements(*n, DOWN);
-        if ((!(n->prev)) || (n->x > 0 && n->prev->x != n->x -1))
+        if (((!n->prev) || n->prev->x != n->x -1) && n->x > 0)
             movements(*n, LEFT);
     }
     _mCmoves = n->gen;
     _mCtime = _mViseted.size();
     _mCsize = i;
+
     for (int i = 0; i < n->gen; n = n->prev)
         _mSolution.push_back(n);
 }

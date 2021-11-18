@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:51:10 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/17 17:02:17 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/18 18:22:30 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <sstream>
 # include <vector>
 # include <memory>
+# include <algorithm>
 
 enum heuristics {
   MANHATTAN = 0,
@@ -29,6 +30,11 @@ struct   node{
     ~node();
     node &   operator=(const node & n);
     bool     operator<(const node & a) const;
+
+    void    move_up();
+    void    move_down();
+    void    move_left();
+    void    move_right();
 
     std::vector<std::vector<int> >  array;
     int             gen, distance, x, y, gridsize;

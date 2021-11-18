@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:51:58 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/17 22:33:26 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/18 18:23:03 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include <iomanip>
 # include <math.h>
 # include <deque>
+# include <chrono>
+# include <memory>
 
 enum moves {
   UP = 0,
@@ -61,10 +63,7 @@ public:
     void    manhattan(node & n) const;
     void    euclidean(node & n) const;
     void    hamming(node & n) const;
-    void    move_up(node & n) const;
-    void    move_down(node & n) const;
-    void    move_left(node & n) const;
-    void    move_right(node & n) const;
+  
     void    movements(const node & n, moves m);
     void    puzzle();
 
@@ -89,6 +88,7 @@ private:
     std::priority_queue<node*, std::vector<node*>, F >                                      _mOpen;
     std::unordered_map<uint64_t, int>                                                       _mClosed;
     std::vector<node*>                                                                      _mSolution;
+    std::__1::chrono::steady_clock::time_point                                              _mTime;
     
 };
 
