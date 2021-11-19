@@ -19,7 +19,6 @@ npuzzle::npuzzle()
 
 npuzzle::~npuzzle()
 {
-    delete _mNode;
 }
 
 void    npuzzle::setHmethod(const std::string s)

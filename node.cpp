@@ -6,18 +6,18 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:57:46 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/18 14:35:20 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/19 16:02:49 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "node.hpp"
 
-node * make_node(int grid)
+std::unique_ptr<node> make_node(int grid)
 {
-    node *n = new node();
+    std::unique_ptr<node> n = std::make_unique<node>();
     n->array.resize(grid, std::vector<int>(grid,0));
     n->prev = nullptr;
-    return (n);
+    return (std::move(n));
 }
 
 node::node()

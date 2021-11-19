@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:51:10 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/18 18:22:30 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/19 15:59:48 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ struct   node{
     struct node*           prev;
 };
 
-node * make_node(int grid);
-// std::shared_ptr<node>  make_node(int grid);
+std::unique_ptr<node> make_node(int grid);
 
 
 

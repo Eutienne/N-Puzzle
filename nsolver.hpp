@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:51:58 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/18 18:23:03 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/19 16:01:09 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,11 @@ enum moves {
 
 struct hash_X{
   uint64_t operator()(const std::vector<std::vector<int> > &x) const {
-    // size_t hash = 4;
     uint64_t hash = 3131313131;
 
     for (auto i : x) {
       for (auto j : i) {
          hash ^= j + 0x9e3779b9 + (hash << 6) + (hash >> 2);
-        // hash ^= std::hash<int>()(j);
       }
     }
 
@@ -83,7 +81,7 @@ private:
     nsolver();
     int                                                                                     _mGridsize, _mCmoves, _mCtime, _mCsize;
     node*                                                                                   _mFirstNode;
-    std::pair<int,int>*                                                                     _mGoal;
+    std::vector<std::pair<int,int> >                                                        _mGoal;
     std::deque<std::unique_ptr<node> >                                                      _mViseted;
     std::priority_queue<node*, std::vector<node*>, F >                                      _mOpen;
     std::unordered_map<uint64_t, int>                                                       _mClosed;

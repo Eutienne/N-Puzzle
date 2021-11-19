@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/18 22:20:47 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/19 16:00:22 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ nsolver::nsolver(const node & n)
 
 nsolver::~nsolver()
 {
-    delete[] _mGoal;
 }
 
 void    nsolver::printS() const
@@ -74,24 +73,26 @@ const node & nsolver::getFirstNode() const{
 
 void    nsolver::setGoal()
 {
-    std::pair<int, int> *grid = new std::pair<int, int>[_mGridsize*_mGridsize];
-    grid[0] = _mGridsize % 2 == 0 ? std::make_pair(_mGridsize / 2, (_mGridsize / 2) -1) : std::make_pair(_mGridsize / 2, (_mGridsize / 2));
+    _mGoal.resize(_mGridsize*_mGridsize, std::pair<int, int>());
+    if (_mGridsize % 2 == 0)
+        _mGoal[0] =  std::make_pair(_mGridsize / 2, (_mGridsize / 2) -1);
+    else
+        _mGoal[0] = std::make_pair(_mGridsize / 2, (_mGridsize / 2));
     for (int counter = _mGridsize, n = 1, y = 0, x = 0, min = -1; n < _mGridsize * _mGridsize;)
     {
         for(; x < counter && n < _mGridsize * _mGridsize; x++, n++)
-            grid[n] = std::make_pair(y, x);
+            _mGoal[n] = std::make_pair(y, x);
         x--; y++;
         for(;y < counter && n < _mGridsize * _mGridsize; y++, n++)
-            grid[n] = std::make_pair(y, x);
+            _mGoal[n] = std::make_pair(y, x);
         x--; y--; counter--;
         for (;x > min && n < _mGridsize * _mGridsize; x--, n++)
-            grid[n] = std::make_pair(y, x);
+            _mGoal[n] = std::make_pair(y, x);
         x++; y--; min++;
         for (;y > min && n < _mGridsize * _mGridsize; y--, n++)
-            grid[n] = std::make_pair(y, x);
+            _mGoal[n] = std::make_pair(y, x);
         x++; y++;
     }
-    _mGoal = grid ;
 }
 
 void    nsolver::setOpen(node * n)
@@ -250,8 +251,8 @@ void nsolver::puzzle()
             movements(*n, LEFT);
     }
     _mCmoves = n->gen;
-    _mCtime = _mViseted.size();
-    _mCsize = i;
+    _mCtime = i;
+    _mCsize = _mViseted.size();
 
     for (int i = 0; i < n->gen; n = n->prev)
         _mSolution.push_back(n);
