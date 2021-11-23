@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/19 16:00:22 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/23 22:23:35 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,50 @@
 
 bool    F::operator()(node * a, node * b) const
 {
-    // if (a->distance == b->distance)
     if (a->distance + a->gen == b->gen + b->distance)
         return (!(a->distance < b->distance));
-        // return (!(a->gen < b->gen));
     return (!(a->distance + a->gen < b->gen + b->distance));
-    // return (!(a->distance < b->distance));
 }
 
 nsolver::nsolver() = default;
 
 
 nsolver::nsolver(const node & n)
-    : _mGridsize(n.gridsize), _mFirstNode(const_cast<node*>(&n))
+    : _mGridsize(n.gridsize), _mFirstNode(const_cast<node*>(&n)), _mHeuristic(MANHATTAN)
 {
+    if (n.FLAGS & EU) 
+        _mHeuristic = EUCLIDEAN;
+    else if (n.FLAGS & HA)
+        _mHeuristic  = HAMMING;
     setGoal();
+    isSolveble();
+
 }
 
 nsolver::~nsolver()
 {
 }
 
+void    nsolver::isSolveble()
+{
+    std::vector<int>  grid;
+
+    for (int i = 1, x = _mGoal.size(); i < x; i++)
+        grid.push_back(_mFirstNode->array[_mGoal[i].first][_mGoal[i].second]);
+    grid.push_back(_mFirstNode->array[_mGoal[0].first][_mGoal[0].second]);
+    for (int i : grid)
+        std::cout << i << std::endl;
+        
+}
+
+
 void    nsolver::printS() const
 {
-    for (int i = _mSolution.size() -1; i >= 0; i--)
-        print(*_mSolution[i]);
-    std::cout << "complexity in time: " << _mCtime << std::endl;
-    std::cout << "complexity in size: " << _mCsize << std::endl;
-    std::cout << "number of moves: " << _mCmoves << std::endl;
+    for (int i = _mSolution._mStaps.size() -1; i >= 0; i--)
+        print(*_mSolution._mStaps[i]);
+    std::cout << "complexity in time: " << _mSolution._mCtime << std::endl;
+    std::cout << "complexity in size: " << _mSolution._mCsize << std::endl;
+    std::cout << "number of moves: " << _mSolution._mCmoves << std::endl;
     // std::cout << "solved in: " << _mTime << "ms" << std::endl;
 }
 
@@ -51,7 +67,7 @@ void    nsolver::print(node const & n) const
     {
         std::cout << std::left << std::setw(3) << " (";
         for (int x = 0; x < _mGridsize; x++)
-            std::cout << std::left << std::setw(3) << n.array[y][x];
+            std::cout << std::left << std::setw(4) << n.array[y][x];
         std::cout << ")" << std::endl;
     }
     std::cout << std::endl;
@@ -161,28 +177,39 @@ void    nsolver::hamming(node & n) const
     for (int y = 0; y < _mGridsize; y++)
     {
         for (int x = 0; x < _mGridsize; x++)
-            _mGoal[n.array[y][x]].first == y && _mGoal[n.array[y][x]].second == x ? h++ : h = h;
+            _mGoal[n.array[y][x]].first == y && _mGoal[n.array[y][x]].second == x ? h = h : h++;
     }
-
+    n.distance = h;
 }
 
 void    nsolver::setH(node & n) const
 {
-     void    (nsolver::*p2f[])(node & n)const = {&nsolver::manhattan, &nsolver::euclidean, &nsolver::hamming};
-    (this->*p2f[n.heuristic])(n);
-    // switch (n.heuristic)
-    // {
-    // case 0:
-    //     manhattan(n);
-    //     break;
-    // case 1:
-    //     euclidean(n);
-    //     break;
-    // default:
-    //     hamming(n);
-    //     break;
-    // }
+    //  void    (nsolver::*p2f[])(node & n)const = {&nsolver::manhattan, &nsolver::euclidean, &nsolver::hamming};
+    // (this->*p2f[n.heuristic])(n);
+    switch (_mHeuristic)
+    {
+    case 0:
+        manhattan(n);
+        break;
+    case 1:
+        euclidean(n);
+        break;
+    default:
+        hamming(n);
+        break;
+    }
 }
+
+void    nsolver::setSolution(node * n, int size)
+{
+    node *tmp = n;
+    _mSolution._mCmoves = n->gen;
+    _mSolution._mCsize = size;
+    for (int i = 0; i < tmp->gen; tmp = tmp->prev)
+        _mSolution._mStaps.push_back(tmp);
+    _mSolution._mStaps.push_back(tmp);
+}
+
 
 std::unique_ptr<node>  nsolver::copyNode(const node & n){
     std::unique_ptr<node> copy(make_node(_mGridsize));
@@ -194,8 +221,6 @@ std::unique_ptr<node>  nsolver::copyNode(const node & n){
 
 void nsolver::movements(const node & n, moves m)
 {
-    hash_X X;
-    uint64_t s;
     std::unique_ptr<node>    tmp = copyNode(n);
     
     switch (m)
@@ -213,15 +238,14 @@ void nsolver::movements(const node & n, moves m)
         tmp->move_right();
         break;
     }
-    setH(*tmp);
-    s = X.operator()(tmp->array);
-    auto it = _mClosed.find(s);
-    if (it == _mClosed.end() || it->second > tmp->gen) {
+    if (!(n.FLAGS & UN))
+        setH(*tmp);
+    auto it = _mClosed.find(*tmp);
+    if (it == _mClosed.end() || it->gen > tmp->gen) {
         setOpen(&(*tmp));
-        if (it == _mClosed.end())
-            _mClosed.insert(std::make_pair(s, tmp->gen));
-        else
-            it->second = tmp->gen;        
+        if (it != _mClosed.end())
+            _mClosed.erase(it);
+        _mClosed.insert(*tmp);
         _mViseted.push_back(std::move(tmp));
     }
 }
@@ -229,17 +253,18 @@ void nsolver::movements(const node & n, moves m)
 void nsolver::puzzle()
 {
     node    *n;
-    hash_X  X;
-    int     i;
 
     n = _mFirstNode;
     n->prev = NULL;
-    setH(*n);
+    if (!(n->FLAGS & UN))
+        setH(*n);
     setOpen(n);
-    _mClosed.insert(std::make_pair(X.operator()(n->array), n->gen));
-    for (i = 0;n->distance != 0; n = &getOpen())
+    _mClosed.insert(*n);
+    for (;n->distance != 0; n = &getOpen())
     {
-        i++;
+        _mSolution._mCtime++;
+        if (n->FLAGS & VB)
+            print(*n);
         _mOpen.pop();
         if (((!n->prev) || n->prev->x != n->x +1) && n->x < _mGridsize -1)
             movements(*n, RIGHT);
@@ -250,10 +275,5 @@ void nsolver::puzzle()
         if (((!n->prev) || n->prev->x != n->x -1) && n->x > 0)
             movements(*n, LEFT);
     }
-    _mCmoves = n->gen;
-    _mCtime = i;
-    _mCsize = _mViseted.size();
-
-    for (int i = 0; i < n->gen; n = n->prev)
-        _mSolution.push_back(n);
+    setSolution(n, _mClosed.size());
 }

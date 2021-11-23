@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:51:58 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/19 16:01:09 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/23 21:52:29 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,11 @@
 # include "node.hpp"
 
 # include <queue>
-# include <unordered_map>
+# include <set>
 # include <iostream>
 # include <iomanip>
 # include <math.h>
 # include <deque>
-# include <chrono>
 # include <memory>
 
 enum moves {
@@ -29,6 +28,19 @@ enum moves {
   DOWN, 
   LEFT,
   RIGHT
+};
+
+enum heuristics {
+  MANHATTAN = 0,
+  EUCLIDEAN, 
+  HAMMING
+};
+
+struct Solution{
+  Solution()
+    : _mCtime(0), _mCsize(0), _mCmoves(0){}
+  int _mCtime, _mCsize, _mCmoves;
+  std::vector<node*>    _mStaps;
 };
 
 struct hash_X{
@@ -71,6 +83,8 @@ public:
     void    setOpen(node * n);
     void    setH(node & n) const;
     void    setGoal();
+    void    setSolution(node * n, int size);
+    void    isSolveble();
     
     node &    getOpen() const;
     const node &                    getFirstNode() const;
@@ -79,14 +93,14 @@ public:
 
 private:
     nsolver();
-    int                                                                                     _mGridsize, _mCmoves, _mCtime, _mCsize;
+    heuristics                                                                              _mHeuristic;
+    int                                                                                     _mGridsize;
     node*                                                                                   _mFirstNode;
     std::vector<std::pair<int,int> >                                                        _mGoal;
     std::deque<std::unique_ptr<node> >                                                      _mViseted;
     std::priority_queue<node*, std::vector<node*>, F >                                      _mOpen;
-    std::unordered_map<uint64_t, int>                                                       _mClosed;
-    std::vector<node*>                                                                      _mSolution;
-    std::__1::chrono::steady_clock::time_point                                              _mTime;
+    std::set<node>		                                                        			        _mClosed;
+    Solution                                                                                _mSolution;
     
 };
 

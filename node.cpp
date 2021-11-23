@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:57:46 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/19 16:02:49 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/23 15:35:24 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ std::unique_ptr<node> make_node(int grid)
 }
 
 node::node()
-    : prev(NULL), gen(0), distance(0), x(0), y(0), gridsize(0), heuristic(MANHATTAN)
+    : prev(NULL), gen(0), distance(0), x(0), y(0), gridsize(0), FLAGS(0)
 {
 }
 
@@ -31,17 +31,17 @@ node::~node()
 
 bool     node::operator<(const node & a) const
 {
-    return (this->distance < a.distance);
+    return (this->array < a.array);
 }
 
 node &   node::operator=(const node & n)
 {
+    this->FLAGS = n.FLAGS;
     this->gen = n.gen;
     this->distance = n.distance;
     this->x = n.x;
     this->gridsize = n.gridsize;
     this->y = n.y;
-    this->heuristic = n.heuristic;
     this->array = n.array;
     this->prev = n.prev;
 
@@ -54,7 +54,8 @@ void    node::move_up()
     {
         std::swap(this->array[this->y][this->x], this->array[this->y - 1][this->x]);
         this->y--;
-        this->gen++;
+        if (!(this->FLAGS & GR))
+            this->gen++;
     }
 }
 
@@ -64,7 +65,8 @@ void    node::move_down()
     {
         std::swap(this->array[this->y][this->x], this->array[this->y + 1][this->x]);
         this->y++;
-        this->gen++;
+        if (!(this->FLAGS & GR))
+            this->gen++;
     }
 }
 
@@ -74,7 +76,8 @@ void    node::move_left()
     {
         std::swap(this->array[this->y][this->x], this->array[this->y][this->x - 1]);
         this->x--;
-        this->gen++;
+        if (!(this->FLAGS & GR))
+            this->gen++;
     }
 }
 
@@ -84,6 +87,7 @@ void    node::move_right()
     {
         std::swap(this->array[this->y][this->x], this->array[this->y][this->x + 1]);
         this->x++;
-        this->gen++;
+        if (!(this->FLAGS & GR))
+            this->gen++;
     }
 }

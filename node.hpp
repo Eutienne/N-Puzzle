@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:51:10 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/19 15:59:48 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/23 15:21:01 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,14 @@
 # include <memory>
 # include <algorithm>
 
-enum heuristics {
-  MANHATTAN = 0,
-  EUCLIDEAN, 
-  HAMMING
-};
+# define MA (1 << 0)
+# define EU (1 << 1)
+# define HA (1 << 2)
+# define A (1 << 3)
+# define GR (1 << 4)
+# define UN (1 << 5)
+# define VB (1 << 6)
+
 
 struct   node{
 
@@ -30,6 +33,7 @@ struct   node{
     ~node();
     node &   operator=(const node & n);
     bool     operator<(const node & a) const;
+    bool     operator==(const node & a) const;
 
     void    move_up();
     void    move_down();
@@ -38,7 +42,7 @@ struct   node{
 
     std::vector<std::vector<int> >  array;
     int             gen, distance, x, y, gridsize;
-    heuristics      heuristic;
+    char            FLAGS;
     struct node*           prev;
 };
 
