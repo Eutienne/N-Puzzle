@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/23 22:23:35 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/25 22:38:50 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,33 @@ nsolver::~nsolver()
 
 void    nsolver::isSolveble()
 {
-    std::vector<int>  grid;
+    std::vector<int>    init;
+    std::vector<int>    goal;
+    int                 invertions=0;
+    int                 tmp;
 
-    for (int i = 1, x = _mGoal.size(); i < x; i++)
-        grid.push_back(_mFirstNode->array[_mGoal[i].first][_mGoal[i].second]);
-    grid.push_back(_mFirstNode->array[_mGoal[0].first][_mGoal[0].second]);
-    for (int i : grid)
-        std::cout << i << std::endl;
-        
+    goal.resize(_mGridsize*_mGridsize);
+
+    for (int i = 0; i < _mGridsize * _mGridsize; i++)
+        goal[i] = _mGoal[i].first * _mGridsize + _mGoal[i].second +1;
+    
+    for (int y = 0; y < _mGridsize; y++)
+    {
+        for (int x = 0; x < _mGridsize; x++){
+            init.push_back(goal[_mFirstNode->array[y][x]]);
+        }
+    }
+
+    for (int i = 0, x =init.size() ; i < x; i++){
+        for (int j = i+1; j < x; j++){
+            if (init[j] < init[i])
+                invertions++;
+        }
+    }
+    tmp = abs(_mFirstNode->y - _mGoal[0].first);
+    tmp += abs(_mFirstNode->x - _mGoal[0].second);
+    if (invertions % 2 != tmp %2)
+        throw std::runtime_error("unsolveble puzzle");
 }
 
 
@@ -58,7 +77,6 @@ void    nsolver::printS() const
     std::cout << "complexity in time: " << _mSolution._mCtime << std::endl;
     std::cout << "complexity in size: " << _mSolution._mCsize << std::endl;
     std::cout << "number of moves: " << _mSolution._mCmoves << std::endl;
-    // std::cout << "solved in: " << _mTime << "ms" << std::endl;
 }
 
 void    nsolver::print(node const & n) const
@@ -222,6 +240,8 @@ std::unique_ptr<node>  nsolver::copyNode(const node & n){
 void nsolver::movements(const node & n, moves m)
 {
     std::unique_ptr<node>    tmp = copyNode(n);
+    hash_X  X;
+    uint64_t s;
     
     switch (m)
     {
@@ -240,12 +260,14 @@ void nsolver::movements(const node & n, moves m)
     }
     if (!(n.FLAGS & UN))
         setH(*tmp);
-    auto it = _mClosed.find(*tmp);
-    if (it == _mClosed.end() || it->gen > tmp->gen) {
+    s = X.operator()(tmp->array);
+    auto it = _mClosed.find(s);
+    if (it == _mClosed.end() || it->second > tmp->gen) {
         setOpen(&(*tmp));
-        if (it != _mClosed.end())
-            _mClosed.erase(it);
-        _mClosed.insert(*tmp);
+        if (it == _mClosed.end())
+            _mClosed.insert(std::make_pair(s, tmp->gen));
+        else
+            it->second = tmp->gen;
         _mViseted.push_back(std::move(tmp));
     }
 }
@@ -253,13 +275,14 @@ void nsolver::movements(const node & n, moves m)
 void nsolver::puzzle()
 {
     node    *n;
-
+    hash_X  X;
+    
     n = _mFirstNode;
     n->prev = NULL;
     if (!(n->FLAGS & UN))
         setH(*n);
     setOpen(n);
-    _mClosed.insert(*n);
+    _mClosed.insert(std::make_pair(X.operator()(n->array), n->gen));
     for (;n->distance != 0; n = &getOpen())
     {
         _mSolution._mCtime++;

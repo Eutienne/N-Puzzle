@@ -21,23 +21,15 @@ npuzzle::~npuzzle()
 {
 }
 
-// void    check_valid(std::vector<int> invertions)
-// {
-
-// }
-
 
 void    npuzzle::setHmethod(const std::string s)
 {
     if ((s == "--m" || s == "--MANHATTAN") && (!(_mNode->FLAGS & EU) && (!(_mNode->FLAGS & HA))))
         _mNode->FLAGS |= MA;
-        // _mNode->heuristic = MANHATTAN;
     else if ((s == "--e" || s == "--EUCLIDEAN") && (!(_mNode->FLAGS & HA) && (!(_mNode->FLAGS & HA))))
         _mNode->FLAGS |= EU;
-        // _mNode->heuristic = EUCLIDEAN;
     else if ((s == "--h" || s == "--HAMMING") && (!(_mNode->FLAGS & EU) && (!(_mNode->FLAGS & MA)))) 
         _mNode->FLAGS |= HA;
-        // _mNode->heuristic = HAMMING;
     else if (s == "--A*" && (!(_mNode->FLAGS & GR) && (!(_mNode->FLAGS & UN))))
         _mNode->FLAGS |= A;
     else if (s == "--GREEDY" && (!(_mNode->FLAGS & A) && (!(_mNode->FLAGS & UN))))
@@ -102,12 +94,6 @@ void    npuzzle::setNode(std::ifstream & file)
     if (check.size() != _mGridsize * _mGridsize)
         throw std::runtime_error("Wrong Input");
 }
-
-/*
- 1 2 3 4 5 6 7 8        goal
-
-  4 3 8 2 6 7 1 5        init        
-*/
 
 const node & npuzzle::getNode() const{
     return(*_mNode);

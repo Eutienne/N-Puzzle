@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:51:58 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/23 21:52:29 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/25 22:37:04 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "node.hpp"
 
 # include <queue>
-# include <set>
+# include <unordered_map>
 # include <iostream>
 # include <iomanip>
 # include <math.h>
@@ -99,7 +99,7 @@ private:
     std::vector<std::pair<int,int> >                                                        _mGoal;
     std::deque<std::unique_ptr<node> >                                                      _mViseted;
     std::priority_queue<node*, std::vector<node*>, F >                                      _mOpen;
-    std::set<node>		                                                        			        _mClosed;
+    std::unordered_map<uint64_t, int>                                                       _mClosed;
     Solution                                                                                _mSolution;
     
 };

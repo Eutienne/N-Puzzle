@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/23 20:47:13 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/23 21:57:54 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/25 22:37:40 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,19 @@ int main(int argc, char **argv)
         {
             P.setNode(file);
             file.close();
-            // P.print(P.getNode());
             for (int i = 2; argv[i]; i++)
                 P.setHmethod(argv[i]);
         }
         else
             throw Usage();
+    nsolver         S(P.getNode());
+    S.puzzle();
+    S.printS();
     }
     catch(const std::exception& e)
     {
         std::cerr << e.what() << '\n';
         exit(1);
     }
-    nsolver         S(P.getNode());
-    return 0;
-    S.puzzle();
-    S.printS();
     }
 }
