@@ -8,7 +8,7 @@ See the [subject](https://github.com/Eutienne/N-Puzzle/blob/master/en.subject.pd
 
 starting 8-puzzle             |  goal 8-puzzle
 :-------------------------:|:-------------------------:
-<img src="image/npuzzle.png" alt="drawing" width="200"/>
+    <img src="image/npuzzle.png" alt="drawing" width="200"/>
 
 ```
 Usage : ./[executeble] [file] [--A_STAR*] [--GREEDY*] [--UNIFORM*]
