@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/23 20:47:13 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/26 17:35:09 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/26 22:11:31 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,13 @@ class Usage : public std::exception
     public:
         virtual const char* what() const throw()
         {
-            return ("Usage : \n \t./[executeble] [file] --[method search*/heuristics**] --[method search*/heuristics**]\n\
-        Optional choice of heuristic and search\n\n\
-    * :\t 1: A_STAR\t\t use A_star search\n\t 2: GREEDY\t\t use greedy search\n\t 3: UNIFORM\t\t use uniform search\n\
-    **:\t 1: MANHATTAN / m\t use manhattan heuristic\n\t 2: EUCLEADEAN / e \t use eucleadean heuristic\n\t 3: HAMMING / h\t\t use manhattan heuristic");
+            return ("Usage : ./[executeble] [file] [--A_STAR*] [--GREEDY*] [--UNIFORM*]\n\
+        [--MANHATTAN / --m**] [--EUCLIDEAN / -e**] [--HAMMING / --h**] [--VERBOSE***]  \n\n\
+    positional arguments:\n\n\tfile                  input file\n\n\
+    Optional choice of heuristic and search\n\n\
+    * :\t --A_STAR\t\t use A_star search\n\t --GREEDY\t\t use greedy search\n\t --UNIFORM\t\t use uniform search\n\n\
+    **:\t --MANHATTAN, --m\t use manhattan heuristic\n\t --EUCLIDEAN, --e \t use euclidean heuristic\n\t --HAMMING, --h\t\t use manhattan heuristic\n\n\
+    ***: --VERBOSE\t\t gui visualizer\n\n");
         }
 
 };
@@ -32,7 +35,7 @@ int main(int argc, char **argv)
 
     try
     {
-        if (argc > 4 || argc < 2)
+        if (argc > 5 || argc < 2)
             throw Usage();
         std::ifstream   file(argv[1]);
         if (file.is_open())

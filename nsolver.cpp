@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/26 20:25:33 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/26 20:40:18 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ void    nsolver::print(node const & n) const
         std::cout << ")" << std::endl;
     }
     std::cout << RESET << std::endl;
-    // std::cout << std::endl;
 }
 
 node &   nsolver::getOpen() const
