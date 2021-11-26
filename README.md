@@ -3,8 +3,12 @@
 
 A [sliding puzzle](https://tristanpenman.com/demos/n-puzzle/) solver using the A* search algorithm with several heuristics.
 
-The goal is to solve so quickly as posible, with a target of under 10 seconds for puzzle size 3.
+The goal is to solve in a snail pattern, with a target of under 10 seconds for puzzle size 3.
 See the [subject](https://github.com/Eutienne/N-Puzzle/blob/master/en.subject.pdf) for more details.
+
+starting 8-puzzle             |  goal 8-puzzle
+:-------------------------:|:-------------------------:
+<img src="imgage/npuzzle.png" alt="drawing" width="200"/>
 
 ```
 Usage : ./[executeble] [file] [--A_STAR*] [--GREEDY*] [--UNIFORM*]
