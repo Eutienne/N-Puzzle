@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/25 22:38:50 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/26 20:25:33 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 bool    F::operator()(node * a, node * b) const
 {
-    if (a->distance + a->gen == b->gen + b->distance)
+    if (a->distance + a->gen == b->gen + b->distance || a->FLAGS & GR)
         return (!(a->distance < b->distance));
+    else if (a->FLAGS & UN)
+        return (!(a->gen < b->gen));
     return (!(a->distance + a->gen < b->gen + b->distance));
 }
 
@@ -74,13 +76,14 @@ void    nsolver::printS() const
 {
     for (int i = _mSolution._mStaps.size() -1; i >= 0; i--)
         print(*_mSolution._mStaps[i]);
-    std::cout << "complexity in time: " << _mSolution._mCtime << std::endl;
+    std::cout << BOLDYELLOW << "complexity in time: " << _mSolution._mCtime << std::endl;
     std::cout << "complexity in size: " << _mSolution._mCsize << std::endl;
-    std::cout << "number of moves: " << _mSolution._mCmoves << std::endl;
+    std::cout << "number of moves: " << _mSolution._mCmoves << RESET << std::endl;
 }
 
 void    nsolver::print(node const & n) const
 {
+    std::cout << BOLDGREEN << "Step: " << n.gen << "     Move: " << n.move << BOLDCYAN << std::endl;
     for (int y = 0; y < _mGridsize; y++)
     {
         std::cout << std::left << std::setw(3) << " (";
@@ -88,13 +91,9 @@ void    nsolver::print(node const & n) const
             std::cout << std::left << std::setw(4) << n.array[y][x];
         std::cout << ")" << std::endl;
     }
-    std::cout << std::endl;
+    std::cout << RESET << std::endl;
+    // std::cout << std::endl;
 }
-
-// std::pair<int, int> & nsolver::getGoal() const
-// {
-//     return (*_mGoal);
-// }
 
 node &   nsolver::getOpen() const
 {
@@ -202,8 +201,6 @@ void    nsolver::hamming(node & n) const
 
 void    nsolver::setH(node & n) const
 {
-    //  void    (nsolver::*p2f[])(node & n)const = {&nsolver::manhattan, &nsolver::euclidean, &nsolver::hamming};
-    // (this->*p2f[n.heuristic])(n);
     switch (_mHeuristic)
     {
     case 0:
@@ -258,8 +255,7 @@ void nsolver::movements(const node & n, moves m)
         tmp->move_right();
         break;
     }
-    if (!(n.FLAGS & UN))
-        setH(*tmp);
+    setH(*tmp);
     s = X.operator()(tmp->array);
     auto it = _mClosed.find(s);
     if (it == _mClosed.end() || it->second > tmp->gen) {
@@ -279,8 +275,7 @@ void nsolver::puzzle()
     
     n = _mFirstNode;
     n->prev = NULL;
-    if (!(n->FLAGS & UN))
-        setH(*n);
+    setH(*n);
     setOpen(n);
     _mClosed.insert(std::make_pair(X.operator()(n->array), n->gen));
     for (;n->distance != 0; n = &getOpen())

@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/23 20:47:13 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/25 22:37:40 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/26 17:35:09 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,16 @@ class Usage : public std::exception
     public:
         virtual const char* what() const throw()
         {
-            return ("Usage : \n \t./[executeble] [file] --[method search*/heuistics**] --[method search*/heuistics**]\n\
+            return ("Usage : \n \t./[executeble] [file] --[method search*/heuristics**] --[method search*/heuristics**]\n\
         Optional choice of heuristic and search\n\n\
-    * :\t 1: A*\n\t 2: GREEDY\n\t 3: UNIFORM\n\
-    **:\t 1: MANHATTAN / m\n\t 2: EUCLEADEAN / e\n\t 3: HAMMING / h");
+    * :\t 1: A_STAR\t\t use A_star search\n\t 2: GREEDY\t\t use greedy search\n\t 3: UNIFORM\t\t use uniform search\n\
+    **:\t 1: MANHATTAN / m\t use manhattan heuristic\n\t 2: EUCLEADEAN / e \t use eucleadean heuristic\n\t 3: HAMMING / h\t\t use manhattan heuristic");
         }
 
 };
 
 int main(int argc, char **argv)
 {
-    {
     npuzzle         P;
 
     try
@@ -51,8 +50,7 @@ int main(int argc, char **argv)
     }
     catch(const std::exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << BOLDBLUE << e.what() << RESET << '\n';
         exit(1);
-    }
     }
 }

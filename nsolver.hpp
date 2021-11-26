@@ -6,12 +6,18 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:51:58 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/25 22:37:04 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/26 17:33:09 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef NSOLVER_HPP
 # define NSOLVER_HPP
+
+# define RESET       "\033[0m"
+# define BOLDGREEN   "\033[1m\033[32m"
+# define BOLDCYAN    "\033[1m\033[36m"
+# define BOLDYELLOW  "\033[1m\033[33m"
+# define BOLDBLUE    "\033[1m\033[34m"
 
 # include "node.hpp"
 
@@ -88,8 +94,6 @@ public:
     
     node &    getOpen() const;
     const node &                    getFirstNode() const;
-    // const node &                    getGoal() const;
-
 
 private:
     nsolver();

@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:51:10 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/25 22:35:43 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/26 16:52:29 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define MA (1 << 0)
 # define EU (1 << 1)
 # define HA (1 << 2)
-# define A (1 << 3)
+# define A_STAR (1 << 3)
 # define GR (1 << 4)
 # define UN (1 << 5)
 # define VB (1 << 6)
@@ -43,7 +43,8 @@ struct   node{
     std::vector<std::vector<int> >  array;
     int             gen, distance, x, y, gridsize;
     char            FLAGS;
-    struct node*           prev;
+    char            move;
+    struct node*    prev;
 };
 
 std::unique_ptr<node> make_node(int grid);

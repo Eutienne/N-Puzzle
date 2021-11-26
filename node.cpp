@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:57:46 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/25 22:35:36 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/26 17:03:01 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ std::unique_ptr<node> make_node(int grid)
 }
 
 node::node()
-    : prev(NULL), gen(0), distance(0), x(0), y(0), gridsize(0), FLAGS(0)
+    : prev(NULL), gen(0), distance(0), x(0), y(0), gridsize(0), FLAGS(0), move('0')
 {
 }
 
@@ -42,6 +42,7 @@ node &   node::operator=(const node & n)
     this->x = n.x;
     this->gridsize = n.gridsize;
     this->y = n.y;
+    this->move = n.move;
     this->array = n.array;
     this->prev = n.prev;
 
@@ -54,8 +55,8 @@ void    node::move_up()
     {
         std::swap(this->array[this->y][this->x], this->array[this->y - 1][this->x]);
         this->y--;
-        if (!(this->FLAGS & GR))
-            this->gen++;
+        this->gen++;
+        this->move = 'U';
     }
 }
 
@@ -65,8 +66,8 @@ void    node::move_down()
     {
         std::swap(this->array[this->y][this->x], this->array[this->y + 1][this->x]);
         this->y++;
-        if (!(this->FLAGS & GR))
-            this->gen++;
+        this->gen++;
+        this->move = 'D';
     }
 }
 
@@ -76,8 +77,8 @@ void    node::move_left()
     {
         std::swap(this->array[this->y][this->x], this->array[this->y][this->x - 1]);
         this->x--;
-        if (!(this->FLAGS & GR))
-            this->gen++;
+        this->gen++;
+        this->move = 'L';
     }
 }
 
@@ -87,7 +88,7 @@ void    node::move_right()
     {
         std::swap(this->array[this->y][this->x], this->array[this->y][this->x + 1]);
         this->x++;
-        if (!(this->FLAGS & GR))
-            this->gen++;
+        this->gen++;
+        this->move = 'R';
     }
 }

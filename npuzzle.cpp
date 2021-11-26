@@ -30,12 +30,12 @@ void    npuzzle::setHmethod(const std::string s)
         _mNode->FLAGS |= EU;
     else if ((s == "--h" || s == "--HAMMING") && (!(_mNode->FLAGS & EU) && (!(_mNode->FLAGS & MA)))) 
         _mNode->FLAGS |= HA;
-    else if (s == "--A*" && (!(_mNode->FLAGS & GR) && (!(_mNode->FLAGS & UN))))
-        _mNode->FLAGS |= A;
-    else if (s == "--GREEDY" && (!(_mNode->FLAGS & A) && (!(_mNode->FLAGS & UN))))
-        _mNode->FLAGS |= A;
-    else if (s == "--UNIFORM" && (!(_mNode->FLAGS & GR) && (!(_mNode->FLAGS & A))))
-        _mNode->FLAGS |= A;
+    else if (s == "--A_STAR" && (!(_mNode->FLAGS & GR) && (!(_mNode->FLAGS & UN))))
+        _mNode->FLAGS |= A_STAR;
+    else if (s == "--GREEDY" && (!(_mNode->FLAGS & A_STAR) && (!(_mNode->FLAGS & UN))))
+        _mNode->FLAGS |= GR;
+    else if (s == "--UNIFORM" && (!(_mNode->FLAGS & GR) && (!(_mNode->FLAGS & A_STAR))))
+        _mNode->FLAGS |= UN;
     else if (s == "--VERBOSE")
         _mNode->FLAGS |= VB;
     else
