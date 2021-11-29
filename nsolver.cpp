@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/26 20:40:18 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/29 12:31:51 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,6 +277,7 @@ void nsolver::puzzle()
     setH(*n);
     setOpen(n);
     _mClosed.insert(std::make_pair(X.operator()(n->array), n->gen));
+    auto start = std::chrono::steady_clock::now();
     for (;n->distance != 0; n = &getOpen())
     {
         _mSolution._mCtime++;

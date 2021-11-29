@@ -6,12 +6,13 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/23 20:47:13 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/26 22:11:31 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/29 12:33:42 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "npuzzle.hpp"
 #include "nsolver.hpp"
+#include <chrono>
 
 class Usage : public std::exception
 {
@@ -31,6 +32,7 @@ class Usage : public std::exception
 
 int main(int argc, char **argv)
 {
+    auto start = std::chrono::steady_clock::now();
     npuzzle         P;
 
     try
@@ -56,4 +58,7 @@ int main(int argc, char **argv)
         std::cerr << BOLDBLUE << e.what() << RESET << '\n';
         exit(1);
     }
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> diff = end - start;
+    std::cout << BOLDYELLOW << "time: " << diff.count() << "s" << RESET << std::endl;
 }
