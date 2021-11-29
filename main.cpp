@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/23 20:47:13 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/29 12:33:42 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/29 22:43:38 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ class Usage : public std::exception
         [--MANHATTAN / --m**] [--EUCLIDEAN / -e**] [--HAMMING / --h**] [--VERBOSE***]  \n\n\
     positional arguments:\n\n\tfile                  input file\n\n\
     Optional choice of heuristic and search\n\n\
+    -h, --help\t            show this help message and exit\n\n\
     * :\t --A_STAR\t\t use A_star search\n\t --GREEDY\t\t use greedy search\n\t --UNIFORM\t\t use uniform search\n\n\
     **:\t --MANHATTAN, --m\t use manhattan heuristic\n\t --EUCLIDEAN, --e \t use euclidean heuristic\n\t --HAMMING, --h\t\t use manhattan heuristic\n\n\
     ***: --VERBOSE\t\t gui visualizer\n\n");
@@ -34,24 +35,39 @@ int main(int argc, char **argv)
 {
     auto start = std::chrono::steady_clock::now();
     npuzzle         P;
+    int             i;
 
     try
     {
-        if (argc > 5 || argc < 2)
+        if (argc > 5)
             throw Usage();
-        std::ifstream   file(argv[1]);
-        if (file.is_open())
+        if (argc == 1 || argv[1][0] == '-')
         {
-            P.setNode(file);
-            file.close();
-            for (int i = 2; argv[i]; i++)
-                P.setHmethod(argv[i]);
+            if (argc > 1 && (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0))
+                throw Usage();
+            std::cout << "Give the size of your grid between 3 and 20" << std::endl;
+            std::cin >> i;
+            if (i > 2 && i < 21)
+                P.make_npuzzle(i);
+            i = 1;
+        }
+        else if (argv[1] )
+        {
+            std::ifstream   file(argv[1]);
+            if (file.is_open())
+            {
+                P.setNode(file);
+                file.close();
+                i = 2;
+            }
         }
         else
             throw Usage();
-    nsolver         S(P.getNode());
-    S.puzzle();
-    S.printS();
+        for (; argv[i]; i++)
+            P.setHmethod(argv[i]);
+        nsolver         S(P.getNode());
+        S.puzzle();
+        S.printS();
     }
     catch(const std::exception& e)
     {

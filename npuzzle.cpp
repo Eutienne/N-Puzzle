@@ -58,6 +58,61 @@ void    remove_comment(std::string & line)
     }
 }
 
+void    npuzzle::hustle_node()
+{
+    std::srand(std::time(nullptr));
+    for (int i = 0; i < 80000; i++)
+    {
+        switch (std::rand() % 4)
+        {
+        case 0:
+            _mNode->move_up();
+            break;
+        case 1:
+            _mNode->move_down();
+            break;
+        case 2:
+            _mNode->move_right();
+            break;  
+        default:
+            _mNode->move_left();
+            break;
+        }
+    }
+}
+
+void    npuzzle::fill_node()
+{
+    _mNode->y = _mGridsize /2;
+    if (_mGridsize % 2 == 0)
+        _mNode->x = (_mGridsize / 2) -1;
+    else
+        _mNode->x = _mGridsize / 2;
+    for (int counter = _mGridsize, n = 1, y = 0, x = 0, min = -1; n < _mGridsize * _mGridsize;)
+    {
+        for(; x < counter && n < _mGridsize * _mGridsize; x++, n++)
+            _mNode->array[y][x] = n;
+        x--; y++;
+        for(;y < counter && n < _mGridsize * _mGridsize; y++, n++)
+            _mNode->array[y][x] = n;
+        x--; y--; counter--;
+        for (;x > min && n < _mGridsize * _mGridsize; x--, n++)
+            _mNode->array[y][x] = n;
+        x++; y--; min++;
+        for (;y > min && n < _mGridsize * _mGridsize; y--, n++)
+            _mNode->array[y][x] = n;
+        x++; y++;
+    }
+}
+
+void    npuzzle::make_npuzzle(int i)
+{
+    _mNode = make_node(_mGridsize);
+    fill_node();
+    hustle_node();
+}
+
+
 void    npuzzle::setNode(std::ifstream & file)
 {
     std::unordered_set<int> check;
@@ -82,6 +137,8 @@ void    npuzzle::setNode(std::ifstream & file)
                 if (_mNode->array[j][i] >= _mGridsize * _mGridsize)
                     throw std::runtime_error("The number is to big");
                 check.insert(_mNode->array[j][i]);
+                if (check.size() != j * _mGridsize + i + 1)
+                    throw std::runtime_error("Wrong Input");
                 if (_mNode->array[j][i] == 0)
                 {
                     _mNode->y = j;

@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/29 12:31:51 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/29 20:17:11 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,9 @@ void    nsolver::isSolveble()
 
 void    nsolver::printS() const
 {
-    for (int i = _mSolution._mStaps.size() -1; i >= 0; i--)
-        print(*_mSolution._mStaps[i]);
+    for (int i = _mSolution._mStaps.size() -1; i >= 0; i--){
+        std::cout << BOLDGREEN << "Step: " << _mSolution._mStaps[i]->gen << "     Move: " << _mSolution._mStaps[i]->move << std::endl;
+        print(*_mSolution._mStaps[i]);}
     std::cout << BOLDYELLOW << "complexity in time: " << _mSolution._mCtime << std::endl;
     std::cout << "complexity in size: " << _mSolution._mCsize << std::endl;
     std::cout << "number of moves: " << _mSolution._mCmoves << RESET << std::endl;
@@ -83,10 +84,9 @@ void    nsolver::printS() const
 
 void    nsolver::print(node const & n) const
 {
-    std::cout << BOLDGREEN << "Step: " << n.gen << "     Move: " << n.move << BOLDCYAN << std::endl;
     for (int y = 0; y < _mGridsize; y++)
     {
-        std::cout << std::left << std::setw(3) << " (";
+        std::cout << BOLDCYAN << std::left << std::setw(3) << " (";
         for (int x = 0; x < _mGridsize; x++)
             std::cout << std::left << std::setw(4) << n.array[y][x];
         std::cout << ")" << std::endl;

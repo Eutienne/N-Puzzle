@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/26 18:24:35 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/23 18:47:15 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/29 22:38:35 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <iostream>
 # include <fstream>
 # include <memory>
+# include <cstdlib>
 # include <unordered_set>
 
 
@@ -29,11 +30,13 @@ class   npuzzle{
         npuzzle();
         ~npuzzle();
         
-        // void    check_valid(std::vector<int> invertions);
         const   node &  getNode() const;
         void    setNode(std::ifstream & file);
         void    print(node const & n);
         void    setHmethod(const std::string s);
+        void    make_npuzzle(int i);
+        void    fill_node();
+        void    hustle_node(); 
 
 
     private:
