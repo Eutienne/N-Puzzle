@@ -30,3 +30,12 @@ Optional choice of heuristic and search
 ***:--VERBOSE               gui visualizer
 
 ```
+
+Examples:
+```
+g++ -std=c++14 -o eu main.cpp npuzzle.cpp node.cpp nsolver.cpp
+./eu maps/3puzzle/3npuzzle1.txt
+```
+## Output example
+
+<img src="image/output.png" alt="drawing" width="400"/>
