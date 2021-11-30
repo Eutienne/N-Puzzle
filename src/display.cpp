@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 12:12:02 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/30 13:39:38 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/30 22:18:05 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ void    display::setGameover(bool b)
 
 void    display::setup()
 {
-    // initscr();
-	// cbreak(); 
-	// noecho(); // suppress automatic echo of typed input
-    // // raw();
-	// curs_set(0); // make cursor invisible
-    // refresh();pallet();
+    initscr();
+	cbreak(); 
+	noecho(); // suppress automatic echo of typed input
+	curs_set(0); // make cursor invisible
+    refresh();
+    pallet();
     box(stdscr, 0 , 0);
 	refresh();
     getyx(stdscr, _mScreen.mY, _mScreen.mX);
@@ -47,7 +47,6 @@ void    display::setup()
 	getmaxyx(stdscr, _mScreen.mHeight, _mScreen.mWidth);
     _mScreen.mStartY = _mScreen.mHeight / 2 - ((3 * _mGridsize) / 2);
     _mScreen.mStartX = _mScreen.mWidth / 2 - ((3 * _mGridsize) / 2);
-    // _mBoard = newwin(_mGridsize *3 +1, _mGridsize *3 +1, _mScreen.mStartY, _mScreen.mStartX);
     
     refresh();
 }
@@ -63,8 +62,10 @@ void    display::pallet()
 
 void    display::draw(node const & N)
 {
+    _mGridsize = N.gridsize;
     clear();
-    box(stdscr, 0, 0);
+	attron(COLOR_PAIR(b_and_w));
+    mvprintw(_mScreen.mStartY - 4, _mScreen.mStartX -15, "Gen: %d", N.gen);
 	attron(COLOR_PAIR(number_color));
 	for (int y = 0, j = 0; y < _mGridsize; y++, j+=3)
 	{

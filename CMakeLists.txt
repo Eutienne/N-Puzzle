@@ -12,6 +12,15 @@ add_executable(N-puzzle_solver
     src/npuzzle.cpp
     src/node.cpp)
 
+add_executable(N-puzzle_Manuel 
+    src/main_m.cpp
+    src/display.cpp
+    src/npuzzle.cpp
+    src/node.cpp)
+
+target_link_libraries(N-puzzle_Manuel PUBLIC
+    -lncurses)
+
 # # tell cmake that there is unittest
 enable_testing()
 

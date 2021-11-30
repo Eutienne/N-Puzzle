@@ -19,6 +19,8 @@ positional arguments:
 
 Optional choice of heuristic and search
 
+-h, --help                  show this help message and exit
+
 * : --A_STAR                use A_star search
     --GREEDY                use greedy search
     --UNIFORM               use uniform search
@@ -33,9 +35,23 @@ Optional choice of heuristic and search
 
 Examples:
 ```
-g++ -std=c++14 -o eu main.cpp npuzzle.cpp node.cpp nsolver.cpp
-./eu maps/3puzzle/3npuzzle1.txt
+cmake -B build / cmake .
+(cd build) / make
+./N-puzzle_solver ../maps/3puzzle/3npuzzle1.txt
 ```
 ## Output example
 
 <img src="image/output.png" alt="drawing" width="400"/>
+
+## Play by yourself
+
+```
+If you build like befor, you can use ./N-puzzle_Manuel [file].
+q = quit
+            w = up
+     a = left    d = right   
+            s = down
+
+```
+
+<img src="image/game.png" alt="drawing" width="400"/>
