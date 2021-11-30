@@ -6,11 +6,11 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 12:12:02 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/05 13:22:05 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/30 13:39:38 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "display.hpp"
+#include "../header/display.hpp"
 
 display::display()
 {

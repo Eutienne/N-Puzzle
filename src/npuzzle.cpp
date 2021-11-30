@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "npuzzle.hpp"
+#include "../header/npuzzle.hpp"
 
 npuzzle::npuzzle()
     : _mGridsize(0)

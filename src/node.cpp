@@ -6,11 +6,11 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:57:46 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/30 10:21:24 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/30 13:40:26 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "node.hpp"
+#include "../header/node.hpp"
 
 std::unique_ptr<node> make_node(int grid)
 {

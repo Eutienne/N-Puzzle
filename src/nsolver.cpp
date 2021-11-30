@@ -6,11 +6,11 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/29 20:17:11 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/30 13:40:57 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "nsolver.hpp"
+#include "../header/nsolver.hpp"
 
 bool    F::operator()(node * a, node * b) const
 {
