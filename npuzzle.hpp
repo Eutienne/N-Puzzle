@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/26 18:24:35 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/29 22:38:35 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/30 10:10:54 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ class   npuzzle{
         void    setHmethod(const std::string s);
         void    make_npuzzle(int i);
         void    fill_node();
-        void    hustle_node(); 
+        void    hustle_node();
+        int     getGridsize();
 
 
     private:

@@ -21,6 +21,12 @@ npuzzle::~npuzzle()
 {
 }
 
+int     npuzzle::getGridsize()
+{
+    return (_mGridsize);
+}
+
+
 
 void    npuzzle::setHmethod(const std::string s)
 {
@@ -107,9 +113,14 @@ void    npuzzle::fill_node()
 
 void    npuzzle::make_npuzzle(int i)
 {
-    _mNode = make_node(_mGridsize);
+    if (i < 3 || i > 20)
+        throw std::runtime_error("Wrong size");            
+    _mNode = make_node(i);
+    _mGridsize = i;
+    _mNode->gridsize = _mGridsize;
     fill_node();
     hustle_node();
+    _mNode->gen = 0;
 }
 
 
@@ -125,6 +136,8 @@ void    npuzzle::setNode(std::ifstream & file)
         {
             pos++;
             _mGridsize = atoi(line.c_str());
+            if (_mGridsize < 3)
+                throw std::runtime_error("The puzzle needs to be atleast 3 x 3");
             _mNode = make_node(_mGridsize);
             _mNode->gen = 0;
             _mNode->gridsize = _mGridsize;

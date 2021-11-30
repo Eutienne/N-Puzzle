@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 11:57:46 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/26 17:03:01 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/30 10:21:24 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void    node::move_up()
 
 void    node::move_down()
 {
-    if (this->array[this->y + 1][this->x])
+    if (this->y + 1 < this->gridsize)
     {
         std::swap(this->array[this->y][this->x], this->array[this->y + 1][this->x]);
         this->y++;
@@ -84,7 +84,7 @@ void    node::move_left()
 
 void    node::move_right()
 {
-    if (this->array[this->y][this->x + 1])
+    if (this->x + 1 < this->gridsize)
     {
         std::swap(this->array[this->y][this->x], this->array[this->y][this->x + 1]);
         this->x++;

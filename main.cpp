@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/23 20:47:13 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/29 22:43:38 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/11/30 10:13:23 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int main(int argc, char **argv)
             {
                 P.setNode(file);
                 file.close();
+                if (P.getGridsize() < 3)
+                    throw std::runtime_error("File is wrong");            
                 i = 2;
             }
         }
