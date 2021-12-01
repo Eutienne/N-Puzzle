@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/30 13:40:57 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/12/01 14:00:44 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void    nsolver::isSolveble()
 {
     std::vector<int>    init;
     std::vector<int>    goal;
-    int                 invertions=0;
+    int                 inversions=0;
     int                 tmp;
 
     goal.resize(_mGridsize*_mGridsize);
@@ -62,12 +62,12 @@ void    nsolver::isSolveble()
     for (int i = 0, x =init.size() ; i < x; i++){
         for (int j = i+1; j < x; j++){
             if (init[j] < init[i])
-                invertions++;
+                inversions++;
         }
     }
     tmp = abs(_mFirstNode->y - _mGoal[0].first);
     tmp += abs(_mFirstNode->x - _mGoal[0].second);
-    if (invertions % 2 != tmp %2)
+    if (inversions % 2 != tmp %2)
         throw std::runtime_error("unsolveble puzzle");
 }
 
@@ -277,7 +277,6 @@ void nsolver::puzzle()
     setH(*n);
     setOpen(n);
     _mClosed.insert(std::make_pair(X.operator()(n->array), n->gen));
-    auto start = std::chrono::steady_clock::now();
     for (;n->distance != 0; n = &getOpen())
     {
         _mSolution._mCtime++;
