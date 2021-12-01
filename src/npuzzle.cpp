@@ -45,7 +45,7 @@ void    npuzzle::setHmethod(const std::string s)
     else if (s == "--VERBOSE")
         _mNode->FLAGS |= VB;
     else
-        throw std::runtime_error("Wrong argument for flag");
+        throw std::runtime_error("Wrong argument or flag");
 }
 
 void    remove_comment(std::string & line)
