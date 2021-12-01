@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:51:58 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/11/29 12:31:00 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/12/01 15:06:01 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ public:
     void    setH(node & n) const;
     void    setGoal();
     void    setSolution(node * n, int size);
-    void    isSolveble();
+    void    isSolvable();
     
     node &    getOpen() const;
     const node &                    getFirstNode() const;

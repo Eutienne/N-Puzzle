@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/04 17:56:34 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/12/01 14:00:44 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/12/01 15:05:57 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ nsolver::nsolver(const node & n)
     else if (n.FLAGS & HA)
         _mHeuristic  = HAMMING;
     setGoal();
-    isSolveble();
+    isSolvable();
 
 }
 
@@ -40,7 +40,7 @@ nsolver::~nsolver()
 {
 }
 
-void    nsolver::isSolveble()
+void    nsolver::isSolvable()
 {
     std::vector<int>    init;
     std::vector<int>    goal;
@@ -68,7 +68,7 @@ void    nsolver::isSolveble()
     tmp = abs(_mFirstNode->y - _mGoal[0].first);
     tmp += abs(_mFirstNode->x - _mGoal[0].second);
     if (inversions % 2 != tmp %2)
-        throw std::runtime_error("unsolveble puzzle");
+        throw std::runtime_error("Unsolvable puzzle");
 }
 
 

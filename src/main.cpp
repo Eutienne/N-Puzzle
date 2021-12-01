@@ -6,7 +6,7 @@
 /*   By: eutrodri <eutrodri@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/23 20:47:13 by eutrodri      #+#    #+#                 */
-/*   Updated: 2021/12/01 12:16:04 by eutrodri      ########   odam.nl         */
+/*   Updated: 2021/12/01 15:16:26 by eutrodri      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ class Usage : public std::exception
         virtual const char* what() const throw()
         {
             return ("Usage : ./[executeble] [file] [--A_STAR*] [--GREEDY*] [--UNIFORM*]\n\
-        [--MANHATTAN / --m**] [--EUCLIDEAN / -e**] [--HAMMING / --h**] [--VERBOSE***]  \n\n\
+        [--MANHATTAN / --m**] [--EUCLIDEAN / --e**] [--HAMMING / --h**] [--VERBOSE***]  \n\n\
     positional arguments:\n\n\tfile                  input file\n\n\
     Optional choice of heuristic and search\n\n\
     -h, --help\t            show this help message and exit\n\n\
@@ -49,6 +49,8 @@ int main(int argc, char **argv)
             std::cin >> i;
             if (i > 2 && i < 21)
                 P.make_npuzzle(i);
+            else
+                throw std::runtime_error("Wrong number");
             i = 1;
         }
         else if (argv[1] )

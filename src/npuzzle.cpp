@@ -32,7 +32,7 @@ void    npuzzle::setHmethod(const std::string s)
 {
     if ((s == "--m" || s == "--MANHATTAN") && (!(_mNode->FLAGS & EU) && (!(_mNode->FLAGS & HA))))
         _mNode->FLAGS |= MA;
-    else if ((s == "--e" || s == "--EUCLIDEAN") && (!(_mNode->FLAGS & HA) && (!(_mNode->FLAGS & HA))))
+    else if ((s == "--e" || s == "--EUCLIDEAN") && (!(_mNode->FLAGS & MA) && (!(_mNode->FLAGS & HA))))
         _mNode->FLAGS |= EU;
     else if ((s == "--h" || s == "--HAMMING") && (!(_mNode->FLAGS & EU) && (!(_mNode->FLAGS & MA)))) 
         _mNode->FLAGS |= HA;
@@ -45,7 +45,7 @@ void    npuzzle::setHmethod(const std::string s)
     else if (s == "--VERBOSE")
         _mNode->FLAGS |= VB;
     else
-        throw std::runtime_error("Wrong argument");
+        throw std::runtime_error("Wrong argument for flag");
 }
 
 void    remove_comment(std::string & line)
@@ -63,6 +63,17 @@ void    remove_comment(std::string & line)
             throw std::runtime_error("Wrong argument");            
     }
 }
+
+void    check_mutiple_args(std::string line)
+{
+    for (int i = 0, c;line[i]; i++)
+    {
+        c=line[i];
+        if (isspace(c))
+            throw std::runtime_error("Wrong argument");            
+    }
+}
+
 
 void    npuzzle::hustle_node()
 {
@@ -134,6 +145,7 @@ void    npuzzle::setNode(std::ifstream & file)
         remove_comment(line);
         if ((!line.empty()) && pos == 0)
         {
+            check_mutiple_args(line);
             pos++;
             _mGridsize = atoi(line.c_str());
             if (_mGridsize < 3)
@@ -142,27 +154,31 @@ void    npuzzle::setNode(std::ifstream & file)
             _mNode->gen = 0;
             _mNode->gridsize = _mGridsize;
         }
-        else if (!line.empty())
+        else if ((!line.empty()) && j < _mGridsize)
         {
             std::stringstream stream(line);
-            for (int i = 0; stream >>_mNode->array[j][i]; i++)
+            for (int i = 0; i < _mGridsize && stream >>_mNode->array[j][i]; i++)
             {
                 if (_mNode->array[j][i] >= _mGridsize * _mGridsize)
                     throw std::runtime_error("The number is to big");
                 check.insert(_mNode->array[j][i]);
                 if (check.size() != j * _mGridsize + i + 1)
-                    throw std::runtime_error("Wrong Input");
+                    throw std::runtime_error("Wrong input");
                 if (_mNode->array[j][i] == 0)
                 {
                     _mNode->y = j;
                     _mNode->x = i;
                 }
             }
+            if (stream >> j)
+                throw std::runtime_error("Wrong input");
             j++; 
         }
+        else if (!line.empty())
+            throw std::runtime_error("Wrong input");
     }
     if (check.size() != _mGridsize * _mGridsize)
-        throw std::runtime_error("Wrong Input");
+        throw std::runtime_error("Wrong input");
 }
 
 const node & npuzzle::getNode() const{
