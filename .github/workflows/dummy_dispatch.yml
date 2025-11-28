@@ -9,7 +9,7 @@ on:
 
 jobs:
   return_message:
-    runs-on: eidt13-small-ubuntu
+    runs-on: ubuntu-latest
 
     steps:
       - name: output
