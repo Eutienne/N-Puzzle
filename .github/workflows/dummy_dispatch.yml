@@ -1,0 +1,20 @@
+name: dummy workflow
+on:
+  workflow_dispatch:
+    inputs:
+      argument1:
+        description: test 1
+        required: false
+        type: string
+
+jobs:
+  return_message:
+    runs-on: eidt13-small-ubuntu
+
+    steps:
+      - name: output
+        shell: bash
+        run: |
+          echo "input is ${{ inputs.argument1 }}"
+
+
